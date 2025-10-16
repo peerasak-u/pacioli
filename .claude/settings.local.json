@@ -4,16 +4,10 @@
       "Bash(bun install:*)",
       "Bash(bun run generate:*)",
       "Bash(git init:*)",
-      "Bash(git -C /Users/peerasak/Workspace/indie/invoice-gen status)",
-      "Bash(git -C /Users/peerasak/Workspace/indie/invoice-gen diff --cached)",
-      "Bash(git -C /Users/peerasak/Workspace/indie/invoice-gen log --oneline -5)",
-      "Bash(git -C /Users/peerasak/Workspace/indie/invoice-gen add .)",
-      "Bash(git -C /Users/peerasak/Workspace/indie/invoice-gen ls-files:*)",
-      "Bash(git -C /Users/peerasak/Workspace/indie/invoice-gen commit -m \"$(cat <<''EOF''\nInitial commit: Invoice generator CLI with PDF generation\n\nAdd TypeScript-based CLI tool for generating professional invoices, \nquotations, and receipts as PDF files. Key features:\n\n- PDF generation using Puppeteer with custom HTML templates\n- Support for invoice, quotation, and receipt document types\n- Input validation with Zod schemas\n- Thai Baht formatting and tax calculations\n- Comprehensive .gitignore protecting sensitive data\n- Example JSON files for all document types\n- Configuration template for freelancer information\n\nProject structure:\n- src/: Core TypeScript modules (generator, validator, utils)\n- templates/: HTML templates for each document type\n- examples/: Sample JSON files demonstrating usage\n- config/: Configuration template (actual config excluded)\n\nGenerated with Claude Code https://claude.com/claude-code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git -C /Users/peerasak/Workspace/indie/invoice-gen log -1 --stat)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

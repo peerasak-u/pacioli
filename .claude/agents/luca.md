@@ -1,5 +1,5 @@
 ---
-name: financial-doc-creator
+name: luca
 description: Creates invoices, quotations, or receipts. Generates JSON, produces PDF, and drafts professional email for sending to clients.
 model: sonnet
 color: orange

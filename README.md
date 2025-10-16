@@ -1,168 +1,163 @@
-# CLI Invoice Generator
-
-A command-line tool for generating professional financial documents (invoices, quotations, receipts) for freelance work. Generates ready-to-use PDF files in A4 format.
+# Luca - Your AI Invoice Assistant
 
 ![Example Documents](example.png)
 
-## Overview
+**Generate professional invoices, quotations, and receipts just by chatting with Luca.**
+No JSON files. No command-line gymnastics. Just tell Luca what you need in plain language.
 
-This tool converts JSON data into beautifully formatted PDF documents using HTML templates and Puppeteer. Perfect for freelancers who need to quickly generate professional invoices, quotations, and receipts from the terminal.
+## Meet Luca
 
-## Features
+Luca is your AI financial document assistant built for [Claude Code](https://claude.com/claude-code). Instead of wrestling with JSON schemas or memorizing CLI commands, you simply have a conversation:
 
-- Generate three types of documents: **Invoice**, **Quotation**, **Receipt**
-- **Auto-numbering** with sequential document tracking
-- Automatic calculation of subtotals, tax, and totals
-- Reusable freelancer configuration
-- Thai language support with Buddhist calendar dates
-- Distinct color themes for each document type
-- A4 format optimization for printing
-- JSON-based data input for easy automation
+```
+@luca I need an invoice for the web design project I just finished for ABC Company
+```
 
-## Tech Stack
+Luca will:
+- Ask you the right questions (customer info, project details, payment terms)
+- Handle Thai tax calculations automatically (withholding vs VAT)
+- Generate a beautiful PDF in A4 format
+- Draft a professional email template to send with it
+- Keep track of document numbers automatically
 
-- **Runtime**: Bun
-- **Rendering**: HTML + JavaScript
-- **PDF Generation**: Puppeteer (renders HTML to A4 PDF)
+Perfect for freelancers who want to spend less time on paperwork and more time doing actual work.
 
-## Installation
+## Quick Start
+
+### Installation
 
 ```bash
 # Install dependencies
 bun install
+
+# Setup your info (one-time)
+cp config/freelancer.example.json config/freelancer.json
+# Edit config/freelancer.json with your details
 ```
 
-## Project Structure
+### Using Luca (Recommended)
+
+Just tag `@luca` in Claude Code and describe what you need:
 
 ```
-invoice-gen/
-├── src/                      # Source code
-│   ├── index.ts              # CLI entry point
-│   ├── generator.ts          # PDF generation logic
-│   ├── validator.ts          # JSON schema validation
-│   └── utils.ts              # Helper functions
-├── templates/                # HTML templates
-│   ├── invoice.html          # Invoice template (dark blue)
-│   ├── quotation.html        # Quotation template (purple)
-│   └── receipt.html          # Receipt template (green)
-├── config/                   # Configuration files
-│   └── freelancer.example.json
-├── data/                     # Your input JSON files
-├── output/                   # Generated PDF files
-├── examples/                 # Example JSON files
-│   ├── invoice.json
-│   ├── quotation.json
-│   └── receipt.json
-└── README.md
+@luca create an invoice for the mobile app project
 ```
 
-## CLI Usage
+```
+@luca I need a quotation for a new client - web redesign project
+```
 
-### Basic Command
+```
+@luca generate a receipt for the payment I just received
+```
+
+Luca handles everything: gathering details, creating files, generating PDFs, and drafting emails.
+
+## What You Get
+
+Three types of professional documents with distinct color themes:
+
+| Type | Color | When to Use |
+|------|-------|-------------|
+| **Invoice** | Dark Blue (#2c3e50) | Bill clients for completed work |
+| **Quotation** | Purple (#8e44ad) | Send price estimates before starting |
+| **Receipt** | Green (#27ae60) | Confirm payments received |
+
+Each document includes:
+- Auto-numbering (e.g., INV-202410-001)
+- Thai language support with Buddhist calendar dates
+- Automatic tax calculations (withholding or VAT)
+- Your branding (name, contact, bank details)
+- Professional formatting ready to print
+
+## How It Works
+
+Behind the scenes, Luca uses a simple but powerful workflow:
+
+1. **Conversation** → Luca gathers all required information through natural chat
+2. **Validation** → Creates properly formatted JSON with correct schema
+3. **Generation** → Renders HTML templates to PDF using Puppeteer
+4. **Delivery** → Provides the PDF + email template ready to send
+
+All documents are A4 format, professionally styled, and include Thai number formatting with proper Buddhist Era dates.
+
+## Alternative: Traditional CLI Usage
+
+If you prefer command-line tools or want to integrate this into scripts:
 
 ```bash
 bun run generate <type> <input-json> [options]
 ```
 
-**Arguments:**
-- `<type>`: Document type - `invoice`, `quotation`, or `receipt`
-- `<input-json>`: Path to JSON data file
-
-**Options:**
-- `--output <path>`: Custom output PDF path (default: `output/{type}-{number}.pdf`)
-- `--config <path>`: Path to freelancer config file (default: `config/freelancer.json`)
-
-### Examples
-
+**Examples:**
 ```bash
-# Generate an invoice
-bun run generate invoice data/invoice-001.json
-
-# Generate a quotation with custom output path
-bun run generate quotation data/quote-001.json --output custom/path.pdf
-
-# Generate a receipt with custom config
-bun run generate receipt data/receipt-001.json --config config/freelancer.json
+bun run generate invoice examples/invoice-auto.json
+bun run generate quotation examples/quotation.json --output custom/path.pdf
+bun run generate receipt examples/receipt.json
 ```
+
+See the `examples/` folder for sample JSON files you can use as templates.
 
 ## Configuration
 
-### Freelancer Configuration
-
-Create `config/freelancer.json` with your details:
+Your freelancer information is stored once in `config/freelancer.json`:
 
 ```json
 {
-  "name": "นาย สมชาย ดีมี",
-  "title": "Web Developer & Designer",
-  "email": "somchai@email.com",
-  "phone": "08-9999-8888",
-  "address": "เลขที่ 123 ซ. เพชรบุรี 45 เขตราชเทวี กรุงเทพมหานคร 10400",
+  "name": "Your Name",
+  "title": "Your Title",
+  "email": "your@email.com",
+  "phone": "08-1234-5678",
+  "address": "Your Address",
   "taxId": "1-2345-67890-12-3",
   "bankInfo": {
-    "bankName": "ธนาคารกรุงเทพ",
-    "accountName": "นาย สมชาย ดีมี",
+    "bankName": "Bank Name",
+    "accountName": "Account Name",
     "accountNumber": "123-456-789-0"
   }
 }
 ```
 
-**Note**: Phone is optional and can be omitted if not needed.
-
-**Tip**: Copy `config/freelancer.example.json` to `config/freelancer.json` and update with your information.
+This information appears on all your documents. Set it once, use it forever.
 
 ## Auto-Numbering
 
-The tool automatically tracks document numbers for each type (invoice, quotation, receipt) using a `.metadata.json` file.
+Documents are automatically numbered with the format `PREFIX-YYYYMM-NNN`:
+- **Invoice**: `INV-202410-001`, `INV-202410-002`, ...
+- **Quotation**: `QT-202410-001`, `QT-202410-002`, ...
+- **Receipt**: `REC-202410-001`, `REC-202410-002`, ...
 
-### Using Auto-Numbering
+Counters reset each month and increment automatically. Luca handles this for you, or you can set `"documentNumber": "auto"` in JSON files when using CLI mode.
 
-Set `"documentNumber": "auto"` in your JSON file:
+Metadata is stored in `.metadata.json` (gitignored by default).
 
-```json
-{
-  "documentNumber": "auto",
-  "issueDate": "2024-10-15",
-  ...
-}
-```
+## Tax Calculations
 
-When you generate the document, the tool will:
-1. Check `.metadata.json` for the last used number
-2. Generate the next sequential number (e.g., `INV-202410-001`, `INV-202410-002`, etc.)
-3. Update the metadata file automatically
+The tool handles Thai tax automatically:
 
-### Document Number Format
+- **Withholding Tax (3%)**: Deducted from subtotal (common for freelancers)
+  - Example: ฿53,750 - ฿1,612.50 = ฿52,137.50
+- **VAT (7%)**: Added to subtotal
+  - Example: ฿196,000 + ฿13,720 = ฿209,720
 
-- **Invoice**: `INV-YYYYMM-NNN` (e.g., `INV-202410-001`)
-- **Quotation**: `QT-YYYYMM-NNN` (e.g., `QT-202410-001`)
-- **Receipt**: `REC-YYYYMM-NNN` (e.g., `REC-202410-001`)
+Luca helps you choose the right tax type based on your situation.
 
-### Metadata File
+## Tech Stack
 
-The `.metadata.json` file is automatically created and tracks:
-- Last document number for each type
-- Current year and month (counters reset automatically each month)
-- Custom prefix for each document type
+Built with:
+- **Bun** - Fast JavaScript runtime
+- **TypeScript** - Type-safe code
+- **Puppeteer** - HTML to PDF rendering
+- **HTML/CSS** - Professional templates with Thai font support (Noto Sans Thai)
 
-**Note**: `.metadata.json` is gitignored by default to keep your business data private.
+---
 
-### Manual Numbering
+## Advanced: JSON Schema Reference
 
-You can still use manual document numbers by specifying them explicitly:
+If you're using CLI mode or integrating with other tools, here are the complete JSON schemas:
 
-```json
-{
-  "documentNumber": "INV-2024-SPECIAL-001",
-  ...
-}
-```
-
-The metadata counter will be updated if the manual number is higher than the current counter.
-
-## JSON Schema
-
-### Invoice Schema
+<details>
+<summary><strong>Invoice Schema</strong></summary>
 
 ```json
 {
@@ -170,234 +165,114 @@ The metadata counter will be updated if the manual number is higher than the cur
   "issueDate": "2024-10-15",
   "dueDate": "2024-10-30",
   "customer": {
-    "name": "นาย ทดสอบ ตัวอย่าง",
-    "company": "บริษัท เดโมนิค จำกัด",
-    "address": "เลขที่ 456 ถ. สาทร เขตสาทร กรุงเทพมหานคร 10120",
-    "taxId": "0-1055-12345-67-8",
-    "phone": "02-111-2222"
+    "name": "Customer Name",
+    "company": "Company Name",
+    "address": "Full Address",
+    "taxId": "Tax ID",
+    "phone": "Phone (optional)"
   },
   "items": [
     {
-      "description": "บริการให้คำปรึกษาเทคโนโลยี",
+      "description": "Service description",
       "quantity": 15,
-      "unit": "ชม.",
+      "unit": "hrs",
       "unitPrice": 750.00
     }
   ],
   "taxRate": 0.03,
   "taxType": "withholding",
   "taxLabel": "หักภาษี ณ ที่จ่าย (3%)",
-  "paymentTerms": [
-    "เริ่มงาน: 30%",
-    "จบ Phase 1: 30%",
-    "จบงาน: 40%"
-  ],
-  "notes": "ขอบคุณที่ใช้บริการ | หากมีคำถามกรุณาติดต่อ"
+  "paymentTerms": ["Optional payment terms"],
+  "notes": "Optional notes"
 }
 ```
 
-**Fields:**
-- `documentNumber` (string, required): Invoice number (e.g., "INV-2024-001" or "auto" for auto-numbering)
-- `issueDate` (string, required): Issue date in YYYY-MM-DD format
-- `dueDate` (string, required): Payment due date in YYYY-MM-DD format
-- `customer` (object, required): Customer information
-  - `name` (string, required): Customer name
-  - `company` (string, optional): Company name
-  - `address` (string, required): Customer address
-  - `taxId` (string, required): Tax identification number
-  - `phone` (string, optional): Contact phone
-- `items` (array, required): Line items
-  - `description` (string): Item description
-  - `quantity` (number): Quantity
-  - `unit` (string): Unit of measurement
-  - `unitPrice` (number): Price per unit
-- `taxRate` (number): Tax rate as decimal (e.g., 0.03 for 3%)
-- `taxType` (string): Tax type - `"withholding"` (deducted) or `"vat"` (added)
-- `taxLabel` (string): Tax label to display
-- `paymentTerms` (array, optional): Payment terms as array of strings
-- `notes` (string, optional): Additional notes or footer text
+**Key Fields:**
+- `documentNumber`: Use "auto" for auto-numbering
+- `dueDate`: Payment deadline
+- `taxType`: "withholding" (deducted) or "vat" (added)
+- `paymentTerms`: Optional array of payment milestones
 
-### Quotation Schema
+</details>
+
+<details>
+<summary><strong>Quotation Schema</strong></summary>
 
 ```json
 {
   "documentNumber": "QT-2024-001",
   "issueDate": "2024-10-15",
   "validUntil": "2024-11-15",
-  "customer": {
-    "name": "นาย ลูกค้า ทดสอบ",
-    "company": "บริษัท ตัวอย่าง จำกัด",
-    "address": "เลขที่ 789 ถ. สุขุมวิท เขตคลองเตย กรุงเทพมหานคร 10110",
-    "taxId": "0-1055-98765-43-2",
-    "phone": "02-333-4444"
-  },
-  "items": [ /* same structure as invoice */ ],
+  "customer": { /* same as invoice */ },
+  "items": [ /* same as invoice */ ],
   "taxRate": 0.07,
   "taxType": "vat",
   "taxLabel": "ภาษีมูลค่าเพิ่ม 7%",
-  "paymentTerms": [
-    "ลงนามสัญญา: 40%",
-    "ส่งมอบระบบ: 40%",
-    "หลังฝึกอบรม: 20%"
-  ],
-  "notes": "ราคานี้มีผลถึงวันที่ระบุ"
+  "paymentTerms": ["Optional payment terms"],
+  "notes": "Optional notes"
 }
 ```
 
 **Differences from Invoice:**
-- `validUntil` (string, required): Quote validity date (replaces `dueDate`)
-- `paymentTerms` (array, optional): Payment terms as array of strings
-- Customer fields: Same requirements as invoice (address and taxId required, phone optional)
+- `validUntil` instead of `dueDate` (quote expiry date)
+- Typically uses VAT instead of withholding tax
 
-### Receipt Schema
+</details>
+
+<details>
+<summary><strong>Receipt Schema</strong></summary>
 
 ```json
 {
   "documentNumber": "REC-2024-001",
   "issueDate": "2024-10-15",
   "paymentDate": "2024-10-15",
-  "paymentMethod": "โอนเงิน",
+  "paymentMethod": "Bank Transfer",
   "referenceNumber": "INV-2024-001",
-  "customer": {
-    "name": "นาย ทดสอบ ตัวอย่าง",
-    "company": "บริษัท เดโมนิค จำกัด",
-    "address": "เลขที่ 456 ถ. สาทร เขตสาทร กรุงเทพมหานคร 10120",
-    "taxId": "0-1055-12345-67-8",
-    "phone": "02-111-2222"
-  },
-  "items": [ /* same structure as invoice */ ],
+  "customer": { /* same as invoice */ },
+  "items": [ /* same as invoice */ ],
   "taxRate": 0.03,
   "taxType": "withholding",
   "taxLabel": "หักภาษี ณ ที่จ่าย (3%)",
   "paidAmount": 52137.50,
-  "paymentTerms": [
-    "งวดที่ 1 (เริ่มงาน): 30% - ชำระแล้ว",
-    "งวดที่ 2 (ส่งมอบ UI): 30% - ชำระแล้ว",
-    "งวดที่ 3 (ส่งมอบงาน): 40% - นี่คือใบเสร็จสำหรับงวดนี้"
-  ],
-  "notes": "ได้รับเงินเรียบร้อยแล้ว"
+  "paymentTerms": ["Optional payment context"],
+  "notes": "Payment received"
 }
 ```
 
 **Differences from Invoice:**
-- `paymentDate` (string, required): Date payment was received (replaces `dueDate`)
-- `paymentMethod` (string, required): Payment method (e.g., "โอนเงิน", "เงินสด")
-- `referenceNumber` (string, optional): Reference to original invoice
-- `paidAmount` (number, required): Amount actually paid
-- `paymentTerms` (array, optional): Payment terms as array of strings (useful for showing payment milestone context)
-- Customer fields: Same requirements as invoice (address and taxId required, phone optional)
+- `paymentDate`: When payment was received
+- `paymentMethod`: How payment was made
+- `referenceNumber`: Original invoice reference (optional)
+- `paidAmount`: Actual amount received
 
-## Document Types & Color Themes
+</details>
 
-| Type | Color | Hex Code | Use Case |
-|------|-------|----------|----------|
-| **Invoice** | Dark Blue | `#2c3e50` | Bill for completed work |
-| **Quotation** | Purple | `#8e44ad` | Price estimate before work |
-| **Receipt** | Green | `#27ae60` | Payment confirmation |
-
-## Development Workflow
-
-1. **Setup**: Copy `config/freelancer.example.json` to `config/freelancer.json` and update with your info
-2. **Create data**: Create JSON file in `data/` folder with document details
-3. **Generate PDF**: Run the generate command
-4. **Send invoice**: Use the generated PDF from `output/` folder
-
-## Examples
-
-See the `examples/` folder for complete examples:
-
-**Manual Numbering:**
-- `examples/invoice.json` - Invoice with manual document number
-- `examples/quotation.json` - Quotation with manual document number
-- `examples/receipt.json` - Receipt with manual document number
-
-**Auto-Numbering:**
-- `examples/invoice-auto.json` - Invoice with auto-numbering
-- `examples/quotation-auto.json` - Quotation with auto-numbering
-- `examples/receipt-auto.json` - Receipt with auto-numbering
-
-Try auto-numbering:
-```bash
-bun run generate invoice examples/invoice-auto.json
-```
-
-## Calculation Logic
-
-The tool automatically calculates:
-
-1. **Subtotal**: Sum of all line items (`quantity × unitPrice`)
-2. **Tax**:
-   - If `taxType` is `"withholding"`: Tax is **deducted** from subtotal
-   - If `taxType` is `"vat"`: Tax is **added** to subtotal
-3. **Total**: Final amount after tax calculation
-
-**Example (Withholding Tax 3%):**
-```
-Subtotal: 53,750.00
-Tax (3%):  (1,612.50)  ← deducted
-Total:     52,137.50
-```
-
-**Example (VAT 7%):**
-```
-Subtotal: 196,000.00
-VAT (7%):   13,720.00  ← added
-Total:     209,720.00
-```
-
-## Thai Language Support
-
-- All templates support Thai language
-- Uses Noto Sans Thai font (loaded from Google Fonts)
-- Dates can be formatted in Buddhist calendar (BE) format
-- Number formatting with Thai thousand separators
-
-## Bonus: Using Claude Code's Luca Agent
-
-If you're using [Claude Code](https://claude.com/claude-code), this project includes a custom **Luca agent** that makes document creation even easier! Instead of manually creating JSON files, Luca acts as your financial document assistant.
-
-### What Luca Does
-
-Luca is an intelligent agent that:
-- Interactively gathers all required information through conversation
-- Creates properly formatted JSON files following the correct schema
-- Automatically generates the PDF document
-- Drafts a professional email template for sending to clients
-- Handles Thai tax calculations correctly (withholding tax vs VAT)
-
-### How to Use Luca
-
-Simply tag the `@luca` agent in Claude Code and describe what you need:
+<details>
+<summary><strong>Project Structure</strong></summary>
 
 ```
-@luca create an invoice for 2nd installment follow the "data/fastwork-001.md"
+invoice-gen/
+├── src/
+│   ├── index.ts          # CLI entry point
+│   ├── generator.ts      # PDF generation
+│   ├── validator.ts      # Schema validation
+│   ├── utils.ts          # Calculations & formatting
+│   └── metadata.ts       # Auto-numbering logic
+├── templates/
+│   ├── invoice.html      # Invoice template (dark blue)
+│   ├── quotation.html    # Quotation template (purple)
+│   └── receipt.html      # Receipt template (green)
+├── config/
+│   └── freelancer.json   # Your info (gitignored)
+├── data/                 # Your JSON inputs
+├── output/               # Generated PDFs
+└── examples/             # Sample JSON files
 ```
 
-```
-@luca I need a quotation for a new web design project for ABC Company
-```
+</details>
 
-```
-@luca create a receipt for the payment I just received from XYZ Corp
-```
-
-### What Luca Delivers
-
-After a brief conversation to gather details, Luca will:
-1. Create a valid JSON file in the `data/` directory
-2. Run the generator to produce the PDF in `output/`
-3. Provide a professional email template (Thai or English)
-4. Summarize everything with file paths and document numbers
-
-This is perfect for:
-- Quick document generation without remembering JSON schema
-- Following up on existing projects (reference markdown notes in `data/`)
-- Getting professional email templates along with your documents
-- Ensuring correct tax calculations every time
-
-### Try It Out
-
-If you have Claude Code installed, just type `@luca` in the chat and describe what document you need!
+---
 
 ## License
 

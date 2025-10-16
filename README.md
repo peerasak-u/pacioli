@@ -2,6 +2,8 @@
 
 A command-line tool for generating professional financial documents (invoices, quotations, receipts) for freelance work. Generates ready-to-use PDF files in A4 format.
 
+![Example Documents](example.png)
+
 ## Overview
 
 This tool converts JSON data into beautifully formatted PDF documents using HTML templates and Puppeteer. Perfect for freelancers who need to quickly generate professional invoices, quotations, and receipts from the terminal.
@@ -349,6 +351,53 @@ Total:     209,720.00
 - Uses Noto Sans Thai font (loaded from Google Fonts)
 - Dates can be formatted in Buddhist calendar (BE) format
 - Number formatting with Thai thousand separators
+
+## Bonus: Using Claude Code's Luca Agent
+
+If you're using [Claude Code](https://claude.com/claude-code), this project includes a custom **Luca agent** that makes document creation even easier! Instead of manually creating JSON files, Luca acts as your financial document assistant.
+
+### What Luca Does
+
+Luca is an intelligent agent that:
+- Interactively gathers all required information through conversation
+- Creates properly formatted JSON files following the correct schema
+- Automatically generates the PDF document
+- Drafts a professional email template for sending to clients
+- Handles Thai tax calculations correctly (withholding tax vs VAT)
+
+### How to Use Luca
+
+Simply tag the `@luca` agent in Claude Code and describe what you need:
+
+```
+@luca create an invoice for 2nd installment follow the "data/fastwork-001.md"
+```
+
+```
+@luca I need a quotation for a new web design project for ABC Company
+```
+
+```
+@luca create a receipt for the payment I just received from XYZ Corp
+```
+
+### What Luca Delivers
+
+After a brief conversation to gather details, Luca will:
+1. Create a valid JSON file in the `data/` directory
+2. Run the generator to produce the PDF in `output/`
+3. Provide a professional email template (Thai or English)
+4. Summarize everything with file paths and document numbers
+
+This is perfect for:
+- Quick document generation without remembering JSON schema
+- Following up on existing projects (reference markdown notes in `data/`)
+- Getting professional email templates along with your documents
+- Ensuring correct tax calculations every time
+
+### Try It Out
+
+If you have Claude Code installed, just type `@luca` in the chat and describe what document you need!
 
 ## License
 

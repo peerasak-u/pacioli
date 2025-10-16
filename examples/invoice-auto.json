@@ -1,0 +1,39 @@
+{
+  "documentNumber": "auto",
+  "issueDate": "2024-10-15",
+  "dueDate": "2024-10-30",
+  "customer": {
+    "name": "นาย ทดสอบ ตัวอย่าง",
+    "company": "บริษัท เดโมนิค จำกัด",
+    "phone": "02-111-2222"
+  },
+  "items": [
+    {
+      "description": "บริการให้คำปรึกษาเทคโนโลยี",
+      "quantity": 15,
+      "unit": "ชม.",
+      "unitPrice": 750.00
+    },
+    {
+      "description": "ออกแบบ UI/UX สำหรับ 3 หน้าจอ",
+      "quantity": 3,
+      "unit": "หน้า",
+      "unitPrice": 2500.00
+    },
+    {
+      "description": "พัฒนาปลั๊กอิน WordPress",
+      "quantity": 1,
+      "unit": "โปรเจค",
+      "unitPrice": 35000.00
+    }
+  ],
+  "taxRate": 0.03,
+  "taxType": "withholding",
+  "taxLabel": "หักภาษี ณ ที่จ่าย (3%)",
+  "paymentTerms": [
+    "เริ่มงาน: 30%",
+    "จบ Phase 1: 30%",
+    "จบงาน: 40%"
+  ],
+  "notes": "ขอบคุณที่ใช้บริการ | หากมีคำถามกรุณาติดต่อ"
+}

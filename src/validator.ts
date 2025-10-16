@@ -131,6 +131,8 @@ function validateBaseDocument(data: any): string[] {
 
   if (!data.documentNumber || typeof data.documentNumber !== "string") {
     errors.push("Document number is required");
+  } else if (data.documentNumber !== "auto" && data.documentNumber.trim() === "") {
+    errors.push("Document number cannot be empty (use 'auto' for auto-numbering)");
   }
 
   if (!data.issueDate || typeof data.issueDate !== "string") {

@@ -1,0 +1,39 @@
+{
+  "documentNumber": "auto",
+  "issueDate": "2024-10-15",
+  "validUntil": "2024-11-15",
+  "customer": {
+    "name": "นาย ทดสอบ ตัวอย่าง",
+    "company": "บริษัท เดโมนิค จำกัด",
+    "phone": "02-111-2222"
+  },
+  "items": [
+    {
+      "description": "ออกแบบและพัฒนาเว็บไซต์ E-Commerce",
+      "quantity": 1,
+      "unit": "โปรเจค",
+      "unitPrice": 150000.00
+    },
+    {
+      "description": "ติดตั้งระบบชำระเงิน",
+      "quantity": 1,
+      "unit": "ระบบ",
+      "unitPrice": 25000.00
+    },
+    {
+      "description": "ฝึกอบรมการใช้งาน",
+      "quantity": 2,
+      "unit": "วัน",
+      "unitPrice": 10500.00
+    }
+  ],
+  "taxRate": 0.07,
+  "taxType": "vat",
+  "taxLabel": "ภาษีมูลค่าเพิ่ม 7%",
+  "paymentTerms": [
+    "ลงนามสัญญา: 40%",
+    "ส่งมอบระบบ: 40%",
+    "หลังฝึกอบรม: 20%"
+  ],
+  "notes": "ราคานี้มีผลถึงวันที่ระบุ"
+}

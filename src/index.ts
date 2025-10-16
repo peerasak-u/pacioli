@@ -15,6 +15,10 @@ import {
   type FreelancerConfig,
 } from "./validator";
 import { generatePDF } from "./generator";
+import {
+  getNextDocumentNumber,
+  incrementDocumentCounter,
+} from "./metadata";
 
 const VALID_TYPES = ["invoice", "quotation", "receipt"] as const;
 type DocumentType = (typeof VALID_TYPES)[number];
@@ -178,16 +182,28 @@ async function main() {
       process.exit(1);
     }
 
+    // Handle auto-numbering
+    let resolvedDocumentNumber = data.documentNumber;
+    if (data.documentNumber === "auto") {
+      console.log(`🔢 Generating next document number...`);
+      resolvedDocumentNumber = await getNextDocumentNumber(options.type);
+      data.documentNumber = resolvedDocumentNumber;
+      console.log(`✓ Document number: ${resolvedDocumentNumber}`);
+    }
+
     // Determine output path
     const outputPath = getOutputPath(
       options.type,
-      data.documentNumber,
+      resolvedDocumentNumber,
       options.outputPath
     );
 
     // Generate PDF
     console.log(`🔨 Generating PDF...`);
     await generatePDF(options.type, data, config, outputPath);
+
+    // Update metadata counter after successful generation
+    await incrementDocumentCounter(options.type, resolvedDocumentNumber);
 
     console.log(`\n✅ Success! PDF saved to: ${outputPath}`);
   } catch (error) {

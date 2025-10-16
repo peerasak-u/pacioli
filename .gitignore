@@ -52,6 +52,9 @@ config/freelancer.json
 # User invoice data (may contain sensitive client information)
 data/
 
+# Document metadata (tracks document counters and generation history)
+.metadata.json
+
 # Keep directory structure
 !output/.gitkeep
 

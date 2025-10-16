@@ -20,10 +20,15 @@ bun install
 # Generate a document
 bun run generate <type> <input-json> [options]
 
-# Examples
+# Examples - Manual numbering
 bun run generate invoice examples/invoice.json
 bun run generate quotation examples/quotation.json --output custom/path.pdf
 bun run generate receipt examples/receipt.json --config config/freelancer.json
+
+# Examples - Auto-numbering
+bun run generate invoice examples/invoice-auto.json
+bun run generate quotation examples/quotation-auto.json
+bun run generate receipt examples/receipt-auto.json
 ```
 
 ## Project Architecture
@@ -33,12 +38,14 @@ bun run generate receipt examples/receipt.json --config config/freelancer.json
 1. **`src/index.ts`** - CLI entry point
    - Parses command-line arguments
    - Validates input files
+   - Handles auto-numbering logic
    - Orchestrates the generation process
 
 2. **`src/validator.ts`** - JSON schema validation
    - Defines TypeScript interfaces for all document types
    - Validation functions for Invoice, Quotation, Receipt
    - Validates freelancer config
+   - Accepts "auto" as valid documentNumber
 
 3. **`src/generator.ts`** - PDF generation
    - Launches Puppeteer headless browser
@@ -51,6 +58,13 @@ bun run generate receipt examples/receipt.json --config config/freelancer.json
    - `formatDateThai()` - Convert dates to Buddhist Era format
    - `readJSON()` - Read and parse JSON files
    - `getOutputPath()` - Generate output file paths
+
+5. **`src/metadata.ts`** - Document numbering system
+   - `readMetadata()` - Read counter state from `.metadata.json`
+   - `writeMetadata()` - Save counter state
+   - `getNextDocumentNumber()` - Generate next sequential number
+   - `incrementDocumentCounter()` - Update counter after generation
+   - Auto-resets counters on year rollover
 
 ### Templates (`templates/`)
 
@@ -106,6 +120,24 @@ cp config/freelancer.example.json config/freelancer.json
 ```
 
 ## Key Implementation Details
+
+### Auto-Numbering System
+The tool maintains sequential document numbers using `.metadata.json`:
+- **Format**: `PREFIX-YYYYMM-NUMBER` (e.g., `INV-202410-001`)
+- **Usage**: Set `"documentNumber": "auto"` in JSON input
+- **Month Rollover**: Counters automatically reset to 1 each month
+- **Manual Override**: Can still use custom document numbers
+- **Smart Update**: Manual numbers update the counter if higher than current value
+- **File Location**: `.metadata.json` in project root (gitignored)
+
+Example workflow:
+```json
+{"documentNumber": "auto", ...}  // First invoice in Oct 2024 → INV-202410-001
+{"documentNumber": "auto", ...}  // Second invoice → INV-202410-002
+{"documentNumber": "INV-202410-999", ...}  // Manual number updates counter to 999
+{"documentNumber": "auto", ...}  // Next auto → INV-202410-1000
+{"documentNumber": "auto", ...}  // First invoice in Nov 2024 → INV-202411-001 (counter resets)
+```
 
 ### Tax Calculation
 - **Withholding Tax**: Deducted from subtotal (common for freelancers in Thailand)

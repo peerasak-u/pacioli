@@ -9,6 +9,7 @@ This tool converts JSON data into beautifully formatted PDF documents using HTML
 ## Features
 
 - Generate three types of documents: **Invoice**, **Quotation**, **Receipt**
+- **Auto-numbering** with sequential document tracking
 - Automatic calculation of subtotals, tax, and totals
 - Reusable freelancer configuration
 - Thai language support with Buddhist calendar dates
@@ -104,6 +105,55 @@ Create `config/freelancer.json` with your details:
 ```
 
 **Tip**: Copy `config/freelancer.example.json` to `config/freelancer.json` and update with your information.
+
+## Auto-Numbering
+
+The tool automatically tracks document numbers for each type (invoice, quotation, receipt) using a `.metadata.json` file.
+
+### Using Auto-Numbering
+
+Set `"documentNumber": "auto"` in your JSON file:
+
+```json
+{
+  "documentNumber": "auto",
+  "issueDate": "2024-10-15",
+  ...
+}
+```
+
+When you generate the document, the tool will:
+1. Check `.metadata.json` for the last used number
+2. Generate the next sequential number (e.g., `INV-202410-001`, `INV-202410-002`, etc.)
+3. Update the metadata file automatically
+
+### Document Number Format
+
+- **Invoice**: `INV-YYYYMM-NNN` (e.g., `INV-202410-001`)
+- **Quotation**: `QT-YYYYMM-NNN` (e.g., `QT-202410-001`)
+- **Receipt**: `REC-YYYYMM-NNN` (e.g., `REC-202410-001`)
+
+### Metadata File
+
+The `.metadata.json` file is automatically created and tracks:
+- Last document number for each type
+- Current year and month (counters reset automatically each month)
+- Custom prefix for each document type
+
+**Note**: `.metadata.json` is gitignored by default to keep your business data private.
+
+### Manual Numbering
+
+You can still use manual document numbers by specifying them explicitly:
+
+```json
+{
+  "documentNumber": "INV-2024-SPECIAL-001",
+  ...
+}
+```
+
+The metadata counter will be updated if the manual number is higher than the current counter.
 
 ## JSON Schema
 
@@ -232,9 +282,21 @@ Create `config/freelancer.json` with your details:
 ## Examples
 
 See the `examples/` folder for complete examples:
-- `examples/invoice.json` - Invoice example
-- `examples/quotation.json` - Quotation example
-- `examples/receipt.json` - Receipt example
+
+**Manual Numbering:**
+- `examples/invoice.json` - Invoice with manual document number
+- `examples/quotation.json` - Quotation with manual document number
+- `examples/receipt.json` - Receipt with manual document number
+
+**Auto-Numbering:**
+- `examples/invoice-auto.json` - Invoice with auto-numbering
+- `examples/quotation-auto.json` - Quotation with auto-numbering
+- `examples/receipt-auto.json` - Receipt with auto-numbering
+
+Try auto-numbering:
+```bash
+bun run generate invoice examples/invoice-auto.json
+```
 
 ## Calculation Logic
 

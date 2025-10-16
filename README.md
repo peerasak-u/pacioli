@@ -98,9 +98,7 @@ Create `config/freelancer.json` with your details:
   "bankInfo": {
     "bankName": "ธนาคารกรุงเทพ",
     "accountName": "นาย สมชาย ดีมี",
-    "accountNumber": "123-456-789-0",
-    "branch": "สาขาสยาม",
-    "swift": "BKKBTHBK"
+    "accountNumber": "123-456-789-0"
   }
 }
 ```
@@ -172,13 +170,18 @@ Create `config/freelancer.json` with your details:
   "taxRate": 0.07,
   "taxType": "vat",
   "taxLabel": "ภาษีมูลค่าเพิ่ม 7%",
+  "paymentTerms": [
+    "ลงนามสัญญา: 40%",
+    "ส่งมอบระบบ: 40%",
+    "หลังฝึกอบรม: 20%"
+  ],
   "notes": "ราคานี้มีผลถึงวันที่ระบุ"
 }
 ```
 
 **Differences from Invoice:**
 - `validUntil` (string): Quote validity date (replaces `dueDate`)
-- No `paymentTerms` field
+- `paymentTerms` (array, optional): Payment terms as array of strings
 
 ### Receipt Schema
 
@@ -195,6 +198,11 @@ Create `config/freelancer.json` with your details:
   "taxType": "withholding",
   "taxLabel": "หักภาษี ณ ที่จ่าย (3%)",
   "paidAmount": 52137.50,
+  "paymentTerms": [
+    "งวดที่ 1 (เริ่มงาน): 30% - ชำระแล้ว",
+    "งวดที่ 2 (ส่งมอบ UI): 30% - ชำระแล้ว",
+    "งวดที่ 3 (ส่งมอบงาน): 40% - นี่คือใบเสร็จสำหรับงวดนี้"
+  ],
   "notes": "ได้รับเงินเรียบร้อยแล้ว"
 }
 ```
@@ -204,7 +212,7 @@ Create `config/freelancer.json` with your details:
 - `paymentMethod` (string): Payment method (e.g., "โอนเงิน", "เงินสด")
 - `referenceNumber` (string, optional): Reference to original invoice
 - `paidAmount` (number): Amount actually paid
-- No `paymentTerms` field
+- `paymentTerms` (array, optional): Payment terms as array of strings (useful for showing payment milestone context)
 
 ## Document Types & Color Themes
 

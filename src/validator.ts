@@ -28,6 +28,7 @@ export interface InvoiceData extends BaseDocument {
 
 export interface QuotationData extends BaseDocument {
   validUntil: string;
+  paymentTerms?: string[];
 }
 
 export interface ReceiptData extends BaseDocument {
@@ -35,6 +36,7 @@ export interface ReceiptData extends BaseDocument {
   paymentMethod: string;
   referenceNumber?: string;
   paidAmount: number;
+  paymentTerms?: string[];
 }
 
 export interface FreelancerConfig {
@@ -47,8 +49,8 @@ export interface FreelancerConfig {
     bankName: string;
     accountName: string;
     accountNumber: string;
-    branch: string;
-    swift: string;
+    branch?: string;
+    swift?: string;
   };
 }
 
@@ -199,6 +201,10 @@ export function validateQuotation(data: any): ValidationResult {
     }
   }
 
+  if (data.paymentTerms && !Array.isArray(data.paymentTerms)) {
+    errors.push("Payment terms must be an array");
+  }
+
   return {
     valid: errors.length === 0,
     errors,
@@ -226,6 +232,10 @@ export function validateReceipt(data: any): ValidationResult {
 
   if (typeof data.paidAmount !== "number" || data.paidAmount < 0) {
     errors.push("Valid paid amount is required");
+  }
+
+  if (data.paymentTerms && !Array.isArray(data.paymentTerms)) {
+    errors.push("Payment terms must be an array");
   }
 
   return {

@@ -61,18 +61,18 @@ All templates use a placeholder injection system with `{{variable}}` syntax:
    - Includes payment terms section
 
 2. **`templates/quotation.html`** - Purple theme (`#8e44ad`)
-   - Placeholders: `{{documentNumber}}`, `{{issueDate}}`, `{{validUntil}}`
-   - No payment terms section
+   - Placeholders: `{{documentNumber}}`, `{{issueDate}}`, `{{validUntil}}`, `{{paymentTerms}}`
+   - Includes optional payment terms section
 
 3. **`templates/receipt.html`** - Green theme (`#27ae60`)
-   - Placeholders: `{{documentNumber}}`, `{{issueDate}}`, `{{paymentDate}}`, `{{paymentMethod}}`, `{{referenceNumber}}`
-   - Shows payment confirmation
+   - Placeholders: `{{documentNumber}}`, `{{issueDate}}`, `{{paymentDate}}`, `{{paymentMethod}}`, `{{referenceNumber}}`, `{{paymentTerms}}`
+   - Shows payment confirmation with optional payment terms context
 
 ### Common Template Placeholders
 
 All templates support:
 - **Freelancer**: `{{freelancer.name}}`, `{{freelancer.title}}`, `{{freelancer.email}}`, `{{freelancer.phone}}`, `{{freelancer.address}}`
-- **Bank**: `{{bank.name}}`, `{{bank.accountName}}`, `{{bank.accountNumber}}`, `{{bank.branch}}`, `{{bank.swift}}`
+- **Bank**: `{{bank.name}}`, `{{bank.accountName}}`, `{{bank.accountNumber}}`, `{{bank.branch}}`
 - **Customer**: `{{customer.name}}`, `{{customer.company}}`, `{{customer.phone}}`
 - **Items**: `{{items}}` - Generated dynamically as table rows
 - **Calculations**: `{{subtotal}}`, `{{taxLabel}}`, `{{taxAmount}}`, `{{total}}`
@@ -89,11 +89,12 @@ All templates support:
 - For price estimates before work begins
 - Requires: `validUntil` (quote expiry date)
 - Tax type: Usually "vat" (added)
-- No payment terms
+- Optional: `paymentTerms` (for outlining payment milestones)
 
 ### Receipt
 - For payment confirmation
 - Requires: `paymentDate`, `paymentMethod`, optional `referenceNumber`, `paidAmount`
+- Optional: `paymentTerms` (for showing payment milestone context)
 - Shows actual payment received
 
 ## Configuration

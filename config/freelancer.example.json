@@ -7,8 +7,6 @@
   "bankInfo": {
     "bankName": "ธนาคารกรุงเทพ",
     "accountName": "นาย สมชาย ดีมี",
-    "accountNumber": "123-456-789-0",
-    "branch": "สาขาสยาม",
-    "swift": "BKKBTHBK"
+    "accountNumber": "123-456-789-0"
   }
 }

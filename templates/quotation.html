@@ -192,27 +192,45 @@
             text-align: right;
         }
 
-        /* Bank Info Section */
+        /* Payment Terms & Bank Info */
         .payment-section {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin-bottom: 10px;
             padding-top: 10px;
             border-top: 0.5px solid #ecf0f1;
         }
 
-        .payment-right {
+        .payment-left, .payment-right {
             font-size: 12px;
         }
 
-        .payment-right h3 {
+        .payment-left h3, .payment-right h3 {
             color: #8e44ad;
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             margin-bottom: 6px;
             letter-spacing: 0.5px;
+        }
+
+        .payment-left ul {
+            list-style: none;
+            color: #666;
+        }
+
+        .payment-left li {
+            margin-bottom: 3px;
+            padding-left: 12px;
+            position: relative;
+            font-size: 11px;
+        }
+
+        .payment-left li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
         }
 
         .payment-right p {
@@ -325,16 +343,20 @@
             </div>
         </div>
 
-        <!-- Bank Info -->
+        <!-- Payment Terms & Bank Info -->
         <div class="payment-section">
+            <div class="payment-left">
+                <h3>เงื่อนไขการจ่ายเงิน</h3>
+                <ul>
+                    {{paymentTerms}}
+                </ul>
+            </div>
             <div class="payment-right">
                 <h3>ข้อมูลธนาคาร</h3>
                 <p>
                     ธนาคาร: {{bank.name}}<br>
                     ชื่อบัญชี: {{bank.accountName}}<br>
-                    เลขบัญชี: {{bank.accountNumber}}<br>
-                    สาขา: {{bank.branch}}<br>
-                    SWIFT: {{bank.swift}}
+                    เลขบัญชี: {{bank.accountNumber}}
                 </p>
             </div>
         </div>

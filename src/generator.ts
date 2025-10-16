@@ -47,7 +47,6 @@ function injectDataIntoTemplate(
     config.bankInfo.accountNumber
   );
   html = html.replace(/\{\{bank\.branch\}\}/g, config.bankInfo.branch || "");
-  html = html.replace(/\{\{bank\.swift\}\}/g, config.bankInfo.swift || "");
 
   // Document information
   html = html.replace(/\{\{documentNumber\}\}/g, data.documentNumber);

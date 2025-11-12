@@ -15,7 +15,6 @@ export interface Customer {
 export interface BaseDocument {
   documentNumber: string;
   issueDate: string;
-  customer: Customer;
   items: LineItem[];
   taxRate: number;
   taxType: "withholding" | "vat";
@@ -71,7 +70,18 @@ export interface ValidationResult {
 /**
  * Validate customer data
  */
-function validateCustomer(customer: any): string[] {
+export function validateCustomer(customer: any): ValidationResult {
+  const errors = validateCustomerInternal(customer);
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
+}
+
+/**
+ * Internal customer validation (returns error array)
+ */
+function validateCustomerInternal(customer: any): string[] {
   const errors: string[] = [];
 
   if (!customer) {
@@ -170,7 +180,6 @@ function validateBaseDocument(data: any): string[] {
     errors.push("Tax label is required");
   }
 
-  errors.push(...validateCustomer(data.customer));
   errors.push(...validateItems(data.items));
 
   return errors;

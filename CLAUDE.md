@@ -18,17 +18,17 @@ CLI tool for generating financial documents (quotations, invoices, receipts) for
 bun install
 
 # Generate a document
-bun run generate <type> <input-json> [options]
+bun run generate <type> <input-json> --customer <customer-json> [options]
 
 # Examples - Manual numbering
-bun run generate invoice examples/invoice.json
-bun run generate quotation examples/quotation.json --output custom/path.pdf
-bun run generate receipt examples/receipt.json --config config/freelancer.json
+bun run generate invoice examples/invoice.json --customer customers/acme-corp.json
+bun run generate quotation examples/quotation.json --customer customers/demo-company.json --output custom/path.pdf
+bun run generate receipt examples/receipt.json --customer customers/test-customer.json --config config/freelancer.json
 
 # Examples - Auto-numbering
-bun run generate invoice examples/invoice-auto.json
-bun run generate quotation examples/quotation-auto.json
-bun run generate receipt examples/receipt-auto.json
+bun run generate invoice examples/invoice-auto.json --customer customers/acme-corp.json
+bun run generate quotation examples/quotation-auto.json --customer customers/demo-company.json
+bun run generate receipt examples/receipt-auto.json --customer customers/acme-corp.json
 ```
 
 ## Project Architecture
@@ -36,20 +36,22 @@ bun run generate receipt examples/receipt-auto.json
 ### Source Files (`src/`)
 
 1. **`src/index.ts`** - CLI entry point
-   - Parses command-line arguments
-   - Validates input files
+   - Parses command-line arguments including `--customer` (required)
+   - Validates input files (document, customer, config)
    - Handles auto-numbering logic
    - Orchestrates the generation process
 
 2. **`src/validator.ts`** - JSON schema validation
    - Defines TypeScript interfaces for all document types
-   - Validation functions for Invoice, Quotation, Receipt
+   - Validation functions for Invoice, Quotation, Receipt, Customer
    - Validates freelancer config
    - Accepts "auto" as valid documentNumber
+   - Customer data is separate from document data
 
 3. **`src/generator.ts`** - PDF generation
    - Launches Puppeteer headless browser
    - Injects data into HTML templates using `{{placeholder}}` syntax
+   - Accepts separate customer parameter
    - Generates A4 format PDFs
 
 4. **`src/utils.ts`** - Helper functions
@@ -115,13 +117,69 @@ All templates support:
 
 ## Configuration
 
+### Freelancer Configuration (Required)
 Before first use, create `config/freelancer.json`:
 ```bash
 cp config/freelancer.example.json config/freelancer.json
 # Edit with your information
 ```
 
+### Customer Database
+Customer data is stored separately in the `customers/` directory. Each customer has their own JSON file:
+
+**Structure:**
+```
+customers/
+├── acme-corp.json
+├── demo-company.json
+└── test-customer.json
+```
+
+**Customer JSON Format:**
+```json
+{
+  "name": "นาย ทดสอบ ตัวอย่าง",
+  "company": "บริษัท เดโมนิค จำกัด",
+  "address": "เลขที่ 456 ถ. สาทร กรุงเทพมหานคร 10120",
+  "taxId": "0-1055-12345-67-8",
+  "phone": "02-111-2222"
+}
+```
+
+**Benefits:**
+- Single source of truth for customer data
+- No duplication across multiple documents
+- Easy to update customer information
+- Can reuse customer files for multiple invoices/receipts
+
+**Usage:**
+Specify customer file with `--customer` flag:
+```bash
+bun run generate invoice data/invoice.json --customer customers/acme-corp.json
+```
+
 ## Key Implementation Details
+
+### Data Separation Architecture
+The tool uses a **separation of concerns** approach:
+
+**Document JSON** (`examples/*.json`):
+- Contains: documentNumber, dates, items, tax info, payment terms, notes
+- Does NOT contain customer data
+
+**Customer JSON** (`customers/*.json`):
+- Contains: name, company, address, taxId, phone
+- Reusable across multiple documents
+
+**Freelancer Config** (`config/freelancer.json`):
+- Contains: your business info, bank details
+- Set once, used for all documents
+
+This separation provides:
+- **DRY Principle**: Single source of truth for customer data
+- **Maintainability**: Update customer info in one place
+- **Reusability**: One customer file for all their invoices/receipts
+- **Clarity**: Document data vs. customer data are clearly separated
 
 ### Auto-Numbering System
 The tool maintains sequential document numbers using `.metadata.json`:

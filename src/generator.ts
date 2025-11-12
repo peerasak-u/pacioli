@@ -10,6 +10,7 @@ import type {
   QuotationData,
   ReceiptData,
   FreelancerConfig,
+  Customer,
 } from "./validator";
 
 /**
@@ -41,6 +42,7 @@ async function loadSignatureBase64(
 async function injectDataIntoTemplate(
   template: string,
   data: DocumentData,
+  customer: Customer,
   config: FreelancerConfig,
   signatureDataUri: string | null
 ): Promise<string> {
@@ -109,14 +111,14 @@ async function injectDataIntoTemplate(
   }
 
   // Customer information
-  html = html.replace(/\{\{customer\.name\}\}/g, data.customer.name);
+  html = html.replace(/\{\{customer\.name\}\}/g, customer.name);
   html = html.replace(
     /\{\{customer\.company\}\}/g,
-    data.customer.company || ""
+    customer.company || ""
   );
-  html = html.replace(/\{\{customer\.address\}\}/g, data.customer.address);
-  html = html.replace(/\{\{customer\.taxId\}\}/g, data.customer.taxId);
-  html = html.replace(/\{\{customer\.phone\}\}/g, data.customer.phone ? `<br>โทร: ${data.customer.phone}` : "");
+  html = html.replace(/\{\{customer\.address\}\}/g, customer.address);
+  html = html.replace(/\{\{customer\.taxId\}\}/g, customer.taxId);
+  html = html.replace(/\{\{customer\.phone\}\}/g, customer.phone ? `<br>โทร: ${customer.phone}` : "");
 
   // Generate items rows
   const itemsHTML = data.items
@@ -181,6 +183,7 @@ async function injectDataIntoTemplate(
 export async function generatePDF(
   type: "invoice" | "quotation" | "receipt",
   data: DocumentData,
+  customer: Customer,
   config: FreelancerConfig,
   outputPath: string
 ): Promise<void> {
@@ -200,7 +203,7 @@ export async function generatePDF(
     : null;
 
   // Inject data into template
-  const html = await injectDataIntoTemplate(template, data, config, signatureDataUri);
+  const html = await injectDataIntoTemplate(template, data, customer, config, signatureDataUri);
 
   // Launch Puppeteer
   const browser = await puppeteer.launch({

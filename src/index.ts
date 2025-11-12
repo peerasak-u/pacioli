@@ -11,8 +11,10 @@ import {
   validateQuotation,
   validateReceipt,
   validateFreelancerConfig,
+  validateCustomer,
   type DocumentData,
   type FreelancerConfig,
+  type Customer,
 } from "./validator";
 import { generatePDF } from "./generator";
 import {
@@ -31,21 +33,22 @@ function printUsage() {
 CLI Invoice Generator
 
 Usage:
-  bun run generate <type> <input-json> [options]
+  bun run generate <type> <input-json> --customer <customer-json> [options]
 
 Arguments:
-  <type>        Document type: invoice, quotation, or receipt
-  <input-json>  Path to JSON data file
+  <type>           Document type: invoice, quotation, or receipt
+  <input-json>     Path to JSON data file
+  --customer       Path to customer JSON file (required)
 
 Options:
-  --output <path>   Custom output PDF path (default: output/{type}-{number}.pdf)
-  --config <path>   Path to freelancer config (default: config/freelancer.json)
-  --help            Show this help message
+  --output <path>  Custom output PDF path (default: output/{type}-{number}.pdf)
+  --config <path>  Path to freelancer config (default: config/freelancer.json)
+  --help           Show this help message
 
 Examples:
-  bun run generate invoice data/invoice-001.json
-  bun run generate quotation data/quote-001.json --output custom/path.pdf
-  bun run generate receipt data/receipt-001.json --config config/freelancer.json
+  bun run generate invoice data/invoice-001.json --customer customers/acme-corp.json
+  bun run generate quotation data/quote-001.json --customer customers/demo.json --output custom/path.pdf
+  bun run generate receipt data/receipt-001.json --customer customers/test.json --config config/freelancer.json
   `);
 }
 
@@ -56,6 +59,7 @@ function parseArgs(args: string[]) {
   const options: {
     type?: DocumentType;
     inputPath?: string;
+    customerPath?: string;
     outputPath?: string;
     configPath: string;
     help: boolean;
@@ -83,7 +87,10 @@ function parseArgs(args: string[]) {
 
   // Parse options
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === "--output" && args[i + 1]) {
+    if (args[i] === "--customer" && args[i + 1]) {
+      options.customerPath = args[i + 1];
+      i++;
+    } else if (args[i] === "--output" && args[i + 1]) {
       options.outputPath = args[i + 1];
       i++;
     } else if (args[i] === "--config" && args[i + 1]) {
@@ -128,9 +135,21 @@ async function main() {
     process.exit(1);
   }
 
+  if (!options.customerPath) {
+    console.error("Error: Customer JSON file path is required (use --customer)");
+    printUsage();
+    process.exit(1);
+  }
+
   // Check if input file exists
   if (!(await fileExists(options.inputPath))) {
     console.error(`Error: Input file not found: ${options.inputPath}`);
+    process.exit(1);
+  }
+
+  // Check if customer file exists
+  if (!(await fileExists(options.customerPath))) {
+    console.error(`Error: Customer file not found: ${options.customerPath}`);
     process.exit(1);
   }
 
@@ -155,6 +174,18 @@ async function main() {
     if (!configValidation.valid) {
       console.error("Error: Invalid freelancer config:");
       configValidation.errors.forEach((err) => console.error(`  - ${err}`));
+      process.exit(1);
+    }
+
+    // Load customer data
+    console.log(`👤 Loading customer from ${options.customerPath}...`);
+    const customer = await readJSON<Customer>(options.customerPath);
+
+    // Validate customer
+    const customerValidation = validateCustomer(customer);
+    if (!customerValidation.valid) {
+      console.error("Error: Invalid customer data:");
+      customerValidation.errors.forEach((err) => console.error(`  - ${err}`));
       process.exit(1);
     }
 
@@ -200,7 +231,7 @@ async function main() {
 
     // Generate PDF
     console.log(`🔨 Generating PDF...`);
-    await generatePDF(options.type, data, config, outputPath);
+    await generatePDF(options.type, data, customer, config, outputPath);
 
     // Update metadata counter after successful generation
     await incrementDocumentCounter(options.type, resolvedDocumentNumber);

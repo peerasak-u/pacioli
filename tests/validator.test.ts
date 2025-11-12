@@ -8,6 +8,7 @@ import {
   validateQuotation,
   validateReceipt,
   validateFreelancerConfig,
+  validateCustomer,
   type InvoiceData,
   type QuotationData,
   type ReceiptData,
@@ -18,6 +19,7 @@ import {
   sampleQuotation,
   sampleReceipt,
   sampleFreelancerConfig,
+  sampleCustomer,
 } from "./fixtures/sample-data";
 
 describe("validateInvoice", () => {
@@ -146,50 +148,35 @@ describe("validateInvoice - Customer validation", () => {
   });
 
   test("rejects missing customer name", () => {
-    const invoice = {
-      ...sampleInvoice,
-      customer: { ...sampleInvoice.customer, name: "" },
-    };
-    const result = validateInvoice(invoice);
+    const customer = { ...sampleCustomer, name: "" };
+    const result = validateCustomer(customer);
     expect(result.valid).toBe(false);
     expect(result.errors).toContain("Customer name is required");
   });
 
   test("rejects missing customer address", () => {
-    const invoice = {
-      ...sampleInvoice,
-      customer: { ...sampleInvoice.customer, address: "" },
-    };
-    const result = validateInvoice(invoice);
+    const customer = { ...sampleCustomer, address: "" };
+    const result = validateCustomer(customer);
     expect(result.valid).toBe(false);
     expect(result.errors).toContain("Customer address is required");
   });
 
   test("rejects missing customer tax ID", () => {
-    const invoice = {
-      ...sampleInvoice,
-      customer: { ...sampleInvoice.customer, taxId: "" },
-    };
-    const result = validateInvoice(invoice);
+    const customer = { ...sampleCustomer, taxId: "" };
+    const result = validateCustomer(customer);
     expect(result.valid).toBe(false);
     expect(result.errors).toContain("Customer tax ID is required");
   });
 
   test("accepts customer without optional phone", () => {
-    const invoice = {
-      ...sampleInvoice,
-      customer: { ...sampleInvoice.customer, phone: undefined },
-    };
-    const result = validateInvoice(invoice);
+    const customer = { ...sampleCustomer, phone: undefined };
+    const result = validateCustomer(customer);
     expect(result.valid).toBe(true);
   });
 
   test("rejects invalid phone type", () => {
-    const invoice = {
-      ...sampleInvoice,
-      customer: { ...sampleInvoice.customer, phone: 123 as any },
-    };
-    const result = validateInvoice(invoice);
+    const customer = { ...sampleCustomer, phone: 123 as any };
+    const result = validateCustomer(customer);
     expect(result.valid).toBe(false);
     expect(result.errors.some((e) => e.includes("phone must be a string"))).toBe(true);
   });

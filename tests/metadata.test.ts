@@ -178,9 +178,11 @@ describe("getNextDocumentNumber", () => {
     // Extract year-month part (e.g., "202410" from "INV-202410-001")
     const match = docNumber.match(/INV-(\d{6})-/);
     expect(match).toBeDefined();
-    const yearMonth = match![1];
-    expect(yearMonth).toHaveLength(6);
-    expect(yearMonth.substring(4)).toMatch(/^(0[1-9]|1[0-2])$/);
+    if (match && match[1]) {
+      const yearMonth = match[1];
+      expect(yearMonth).toHaveLength(6);
+      expect(yearMonth.substring(4)).toMatch(/^(0[1-9]|1[0-2])$/);
+    }
   });
 
   test("pads document number with leading zeros", async () => {
@@ -410,8 +412,8 @@ describe("Document number format consistency", () => {
     const nextDocNumber = await getNextDocumentNumber("invoice");
 
     // Extract numbers and verify increment
-    const firstNum = parseInt(docNumber.split("-")[2]);
-    const secondNum = parseInt(nextDocNumber.split("-")[2]);
+    const firstNum = parseInt(docNumber.split("-")[2] ?? "0");
+    const secondNum = parseInt(nextDocNumber.split("-")[2] ?? "0");
     expect(secondNum).toBe(firstNum + 1);
   });
 
@@ -426,8 +428,8 @@ describe("Document number format consistency", () => {
 
     // Verify all numbers are sequential
     for (let i = 1; i < numbers.length; i++) {
-      const prevNum = parseInt(numbers[i - 1].split("-")[2]);
-      const currentNum = parseInt(numbers[i].split("-")[2]);
+      const prevNum = parseInt(numbers[i - 1]?.split("-")[2] ?? "0");
+      const currentNum = parseInt(numbers[i]?.split("-")[2] ?? "0");
       expect(currentNum).toBe(prevNum + 1);
     }
   });

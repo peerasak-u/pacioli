@@ -4,6 +4,9 @@
 
 import type { LineItem } from "./utils";
 
+// Constants
+const DATE_FORMAT_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
 export interface Customer {
   name: string;
   company?: string;
@@ -15,6 +18,7 @@ export interface Customer {
 export interface BaseDocument {
   documentNumber: string;
   issueDate: string;
+  customer?: Customer;
   items: LineItem[];
   taxRate: number;
   taxType: "withholding" | "vat";
@@ -162,8 +166,7 @@ function validateBaseDocument(data: any): string[] {
     errors.push("Issue date is required");
   } else {
     // Validate date format
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(data.issueDate)) {
+    if (!DATE_FORMAT_REGEX.test(data.issueDate)) {
       errors.push("Issue date must be in YYYY-MM-DD format");
     }
   }
@@ -180,6 +183,11 @@ function validateBaseDocument(data: any): string[] {
     errors.push("Tax label is required");
   }
 
+  // Validate customer data if the property exists in the document
+  if ("customer" in data) {
+    errors.push(...validateCustomerInternal(data.customer));
+  }
+
   errors.push(...validateItems(data.items));
 
   return errors;
@@ -194,8 +202,7 @@ export function validateInvoice(data: any): ValidationResult {
   if (!data.dueDate || typeof data.dueDate !== "string") {
     errors.push("Due date is required");
   } else {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(data.dueDate)) {
+    if (!DATE_FORMAT_REGEX.test(data.dueDate)) {
       errors.push("Due date must be in YYYY-MM-DD format");
     }
   }
@@ -219,8 +226,7 @@ export function validateQuotation(data: any): ValidationResult {
   if (!data.validUntil || typeof data.validUntil !== "string") {
     errors.push("Valid until date is required");
   } else {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(data.validUntil)) {
+    if (!DATE_FORMAT_REGEX.test(data.validUntil)) {
       errors.push("Valid until date must be in YYYY-MM-DD format");
     }
   }
@@ -244,8 +250,7 @@ export function validateReceipt(data: any): ValidationResult {
   if (!data.paymentDate || typeof data.paymentDate !== "string") {
     errors.push("Payment date is required");
   } else {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(data.paymentDate)) {
+    if (!DATE_FORMAT_REGEX.test(data.paymentDate)) {
       errors.push("Payment date must be in YYYY-MM-DD format");
     }
   }

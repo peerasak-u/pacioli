@@ -130,7 +130,7 @@ export async function incrementDocumentCounter(
 
   // Extract number from document number (e.g., "INV-202410-005" -> 5)
   const match = documentNumber.match(/-(\d+)$/);
-  if (match) {
+  if (match && match[1]) {
     const number = parseInt(match[1], 10);
     // Only update if this number is higher than current
     if (number > typeMetadata.lastNumber) {

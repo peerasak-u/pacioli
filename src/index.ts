@@ -87,14 +87,17 @@ function parseArgs(args: string[]) {
 
   // Parse options
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === "--customer" && args[i + 1]) {
-      options.customerPath = args[i + 1];
+    const arg = args[i];
+    const nextArg = args[i + 1];
+
+    if (arg === "--customer" && nextArg) {
+      options.customerPath = nextArg;
       i++;
-    } else if (args[i] === "--output" && args[i + 1]) {
-      options.outputPath = args[i + 1];
+    } else if (arg === "--output" && nextArg) {
+      options.outputPath = nextArg;
       i++;
-    } else if (args[i] === "--config" && args[i + 1]) {
-      options.configPath = args[i + 1];
+    } else if (arg === "--config" && nextArg) {
+      options.configPath = nextArg;
       i++;
     }
   }

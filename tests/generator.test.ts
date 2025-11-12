@@ -12,12 +12,14 @@ import type {
   QuotationData,
   ReceiptData,
   FreelancerConfig,
+  Customer,
 } from "../src/validator";
 import {
   sampleInvoice,
   sampleQuotation,
   sampleReceipt,
   sampleFreelancerConfig,
+  sampleCustomer,
 } from "./fixtures/sample-data";
 
 /**
@@ -27,6 +29,7 @@ import {
 function simulateInjectData(
   template: string,
   data: InvoiceData | QuotationData | ReceiptData,
+  customer: Customer,
   config: FreelancerConfig
 ): string {
   let html = template;
@@ -100,16 +103,16 @@ function simulateInjectData(
   }
 
   // Customer information
-  html = html.replace(/\{\{customer\.name\}\}/g, data.customer.name);
+  html = html.replace(/\{\{customer\.name\}\}/g, customer.name);
   html = html.replace(
     /\{\{customer\.company\}\}/g,
-    data.customer.company || ""
+    customer.company || ""
   );
-  html = html.replace(/\{\{customer\.address\}\}/g, data.customer.address);
-  html = html.replace(/\{\{customer\.taxId\}\}/g, data.customer.taxId);
+  html = html.replace(/\{\{customer\.address\}\}/g, customer.address);
+  html = html.replace(/\{\{customer\.taxId\}\}/g, customer.taxId);
   html = html.replace(
     /\{\{customer\.phone\}\}/g,
-    data.customer.phone ? `<br>โทร: ${data.customer.phone}` : ""
+    customer.phone ? `<br>โทร: ${customer.phone}` : ""
   );
 
   // Generate items rows
@@ -161,27 +164,27 @@ function simulateInjectData(
 describe("Data injection - Freelancer info", () => {
   test("injects freelancer name", () => {
     const template = "<div>{{freelancer.name}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(sampleFreelancerConfig.name);
     expect(result).not.toContain("{{freelancer.name}}");
   });
 
   test("injects freelancer email", () => {
     const template = "<div>{{freelancer.email}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(sampleFreelancerConfig.email);
   });
 
   test("injects freelancer phone with prefix", () => {
     const template = "<div>{{freelancer.phone}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(` | โทร: ${sampleFreelancerConfig.phone}`);
   });
 
   test("handles missing optional phone", () => {
     const config = { ...sampleFreelancerConfig, phone: undefined };
     const template = "<div>{{freelancer.phone}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, config);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, config);
     expect(result).toBe("<div></div>");
   });
 
@@ -193,7 +196,7 @@ describe("Data injection - Freelancer info", () => {
       {{freelancer.address}}
       {{freelancer.taxId}}
     `;
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(sampleFreelancerConfig.name);
     expect(result).toContain(sampleFreelancerConfig.title);
     expect(result).toContain(sampleFreelancerConfig.email);
@@ -205,7 +208,7 @@ describe("Data injection - Freelancer info", () => {
 describe("Data injection - Bank info", () => {
   test("injects bank name", () => {
     const template = "<div>{{bank.name}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(sampleFreelancerConfig.bankInfo.bankName);
   });
 
@@ -216,7 +219,7 @@ describe("Data injection - Bank info", () => {
       {{bank.accountNumber}}
       {{bank.branch}}
     `;
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(sampleFreelancerConfig.bankInfo.bankName);
     expect(result).toContain(sampleFreelancerConfig.bankInfo.accountName);
     expect(result).toContain(sampleFreelancerConfig.bankInfo.accountNumber);
@@ -226,44 +229,44 @@ describe("Data injection - Bank info", () => {
 describe("Data injection - Document info", () => {
   test("injects document number", () => {
     const template = "<div>{{documentNumber}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(sampleInvoice.documentNumber);
   });
 
   test("formats issue date to Thai BE", () => {
     const template = "<div>{{issueDate}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(formatDateThai(sampleInvoice.issueDate));
     expect(result).not.toContain(sampleInvoice.issueDate); // Should not contain raw date
   });
 
   test("injects invoice due date", () => {
     const template = "<div>{{dueDate}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(formatDateThai(sampleInvoice.dueDate));
   });
 
   test("injects quotation valid until date", () => {
     const template = "<div>{{validUntil}}</div>";
-    const result = simulateInjectData(template, sampleQuotation, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleQuotation, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(formatDateThai(sampleQuotation.validUntil));
   });
 
   test("injects receipt payment date", () => {
     const template = "<div>{{paymentDate}}</div>";
-    const result = simulateInjectData(template, sampleReceipt, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleReceipt, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(formatDateThai(sampleReceipt.paymentDate));
   });
 
   test("injects receipt payment method", () => {
     const template = "<div>{{paymentMethod}}</div>";
-    const result = simulateInjectData(template, sampleReceipt, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleReceipt, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(sampleReceipt.paymentMethod);
   });
 
   test("injects receipt reference number", () => {
     const template = "<div>{{referenceNumber}}</div>";
-    const result = simulateInjectData(template, sampleReceipt, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleReceipt, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(sampleReceipt.referenceNumber!);
   });
 });
@@ -271,29 +274,26 @@ describe("Data injection - Document info", () => {
 describe("Data injection - Customer info", () => {
   test("injects customer name", () => {
     const template = "<div>{{customer.name}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
-    expect(result).toContain(sampleInvoice.customer.name);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
+    expect(result).toContain(sampleCustomer.name);
   });
 
   test("injects customer company", () => {
     const template = "<div>{{customer.company}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
-    expect(result).toContain(sampleInvoice.customer.company!);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
+    expect(result).toContain(sampleCustomer.company!);
   });
 
   test("injects customer phone with prefix", () => {
     const template = "<div>{{customer.phone}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
-    expect(result).toContain(`<br>โทร: ${sampleInvoice.customer.phone}`);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
+    expect(result).toContain(`<br>โทร: ${sampleCustomer.phone}`);
   });
 
   test("handles missing optional customer phone", () => {
-    const invoice = {
-      ...sampleInvoice,
-      customer: { ...sampleInvoice.customer, phone: undefined },
-    };
+    const customer = { ...sampleCustomer, phone: undefined };
     const template = "<div>{{customer.phone}}</div>";
-    const result = simulateInjectData(template, invoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, customer, sampleFreelancerConfig);
     expect(result).toBe("<div></div>");
   });
 
@@ -304,18 +304,18 @@ describe("Data injection - Customer info", () => {
       {{customer.address}}
       {{customer.taxId}}
     `;
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
-    expect(result).toContain(sampleInvoice.customer.name);
-    expect(result).toContain(sampleInvoice.customer.company!);
-    expect(result).toContain(sampleInvoice.customer.address);
-    expect(result).toContain(sampleInvoice.customer.taxId);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
+    expect(result).toContain(sampleCustomer.name);
+    expect(result).toContain(sampleCustomer.company!);
+    expect(result).toContain(sampleCustomer.address);
+    expect(result).toContain(sampleCustomer.taxId);
   });
 });
 
 describe("Data injection - Items", () => {
   test("generates table rows for items", () => {
     const template = "<table>{{items}}</table>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     // Should contain all item descriptions
     sampleInvoice.items.forEach((item) => {
@@ -325,7 +325,7 @@ describe("Data injection - Items", () => {
 
   test("includes item quantities and units", () => {
     const template = "<table>{{items}}</table>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     sampleInvoice.items.forEach((item) => {
       expect(result).toContain(`${item.quantity} ${item.unit}`);
@@ -334,7 +334,7 @@ describe("Data injection - Items", () => {
 
   test("formats item prices correctly", () => {
     const template = "<table>{{items}}</table>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     sampleInvoice.items.forEach((item) => {
       expect(result).toContain(formatNumber(item.unitPrice));
@@ -343,7 +343,7 @@ describe("Data injection - Items", () => {
 
   test("calculates and formats line totals", () => {
     const template = "<table>{{items}}</table>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     sampleInvoice.items.forEach((item) => {
       const lineTotal = item.quantity * item.unitPrice;
@@ -353,7 +353,7 @@ describe("Data injection - Items", () => {
 
   test("generates sequential item numbers", () => {
     const template = "<table>{{items}}</table>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     for (let i = 1; i <= sampleInvoice.items.length; i++) {
       expect(result).toContain(`<td>${i}</td>`);
@@ -364,7 +364,7 @@ describe("Data injection - Items", () => {
 describe("Data injection - Financial calculations", () => {
   test("injects formatted subtotal", () => {
     const template = "<div>{{subtotal}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     const { subtotal } = calculateTotals(
       sampleInvoice.items,
@@ -376,13 +376,13 @@ describe("Data injection - Financial calculations", () => {
 
   test("injects tax label", () => {
     const template = "<div>{{taxLabel}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(sampleInvoice.taxLabel);
   });
 
   test("formats withholding tax with parentheses", () => {
     const template = "<div>{{taxAmount}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     const { taxAmount } = calculateTotals(
       sampleInvoice.items,
@@ -394,7 +394,7 @@ describe("Data injection - Financial calculations", () => {
 
   test("formats VAT without parentheses", () => {
     const template = "<div>{{taxAmount}}</div>";
-    const result = simulateInjectData(template, sampleQuotation, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleQuotation, sampleCustomer, sampleFreelancerConfig);
 
     const { taxAmount } = calculateTotals(
       sampleQuotation.items,
@@ -407,7 +407,7 @@ describe("Data injection - Financial calculations", () => {
 
   test("injects formatted total", () => {
     const template = "<div>{{total}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     const { total } = calculateTotals(
       sampleInvoice.items,
@@ -421,7 +421,7 @@ describe("Data injection - Financial calculations", () => {
 describe("Data injection - Payment terms", () => {
   test("injects payment terms as list items", () => {
     const template = "<ul>{{paymentTerms}}</ul>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     sampleInvoice.paymentTerms!.forEach((term) => {
       expect(result).toContain(`<li>${term}</li>`);
@@ -431,14 +431,14 @@ describe("Data injection - Payment terms", () => {
   test("handles missing payment terms", () => {
     const invoice = { ...sampleInvoice, paymentTerms: undefined };
     const template = "<ul>{{paymentTerms}}</ul>";
-    const result = simulateInjectData(template, invoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, invoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toBe("<ul></ul>");
   });
 
   test("handles empty payment terms array", () => {
     const invoice = { ...sampleInvoice, paymentTerms: [] };
     const template = "<ul>{{paymentTerms}}</ul>";
-    const result = simulateInjectData(template, invoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, invoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toBe("<ul></ul>");
   });
 });
@@ -446,14 +446,14 @@ describe("Data injection - Payment terms", () => {
 describe("Data injection - Notes", () => {
   test("injects notes", () => {
     const template = "<div>{{notes}}</div>";
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toContain(sampleInvoice.notes!);
   });
 
   test("handles missing notes", () => {
     const invoice = { ...sampleInvoice, notes: undefined };
     const template = "<div>{{notes}}</div>";
-    const result = simulateInjectData(template, invoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, invoice, sampleCustomer, sampleFreelancerConfig);
     expect(result).toBe("<div></div>");
   });
 });
@@ -465,7 +465,7 @@ describe("Data injection - Multiple placeholders", () => {
       <span>{{freelancer.name}}</span>
       <p>{{freelancer.name}}</p>
     `;
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     // Count occurrences
     const matches = result.match(new RegExp(sampleFreelancerConfig.name, "g"));
@@ -484,7 +484,7 @@ describe("Data injection - Multiple placeholders", () => {
       <p>Total: {{total}}</p>
       <p>Notes: {{notes}}</p>
     `;
-    const result = simulateInjectData(template, sampleInvoice, sampleFreelancerConfig);
+    const result = simulateInjectData(template, sampleInvoice, sampleCustomer, sampleFreelancerConfig);
 
     // Verify no placeholders remain
     expect(result).not.toContain("{{");
@@ -493,6 +493,6 @@ describe("Data injection - Multiple placeholders", () => {
     // Verify key data is present
     expect(result).toContain(sampleInvoice.documentNumber);
     expect(result).toContain(sampleFreelancerConfig.name);
-    expect(result).toContain(sampleInvoice.customer.name);
+    expect(result).toContain(sampleCustomer.name);
   });
 });

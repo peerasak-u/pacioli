@@ -1,283 +1,340 @@
-# Luca - Your AI Invoice Assistant
+# Pacioli - Professional Financial Documents for Freelancers
 
 ![Example Documents](example.png)
 
-**Generate professional invoices, quotations, and receipts just by chatting with Luca.**
-No JSON files. No command-line gymnastics. Just tell Luca what you need in plain language.
+> Named after **Luca Pacioli** (1494), the father of modern accounting and bookkeeping
 
-## Meet Luca
+Generate professional invoices, quotations, and receipts in seconds. Beautiful A4 PDFs with automatic Thai numbering, tax calculations, and customizable templates.
 
-Luca is your AI financial document assistant built for [Claude Code](https://claude.com/claude-code). Instead of wrestling with JSON schemas or memorizing CLI commands, you simply have a conversation:
+## Features
+
+- **Zero configuration** - Start generating documents in 30 seconds with `bunx pacioli init`
+- **Auto-numbering** - Sequential document numbers that reset monthly (INV-202511-001, INV-202511-002, etc.)
+- **Thai tax support** - Automatic withholding tax and VAT calculations
+- **Beautiful templates** - Professional HTML/CSS templates for each document type
+- **Customizable** - Edit templates to match your branding
+- **Customer database** - Reusable customer JSON files, no duplication
+- **Bun-native** - Lightning fast with Bun runtime
+
+## Quick Start
+
+### Using bunx (No Installation Required)
+
+```bash
+# Create a new project directory
+mkdir my-invoices && cd my-invoices
+
+# Initialize with templates and examples
+bunx pacioli init
+
+# Configure your profile (one-time setup)
+cp config/freelancer.example.json config/freelancer.json
+# Edit config/freelancer.json with your information
+
+# Generate your first invoice
+bunx pacioli generate invoice examples/invoice-auto.json --customer customers/acme-corp.json
+```
+
+That's it! Your PDF is ready in `output/invoice-INV-202511-001.pdf`
+
+### Installation (Optional)
+
+If you use this frequently, install globally:
+
+```bash
+bun install -g pacioli
+
+# Now use without bunx prefix
+pacioli init
+pacioli generate invoice data.json --customer customer.json
+```
+
+## Usage
+
+### Initialize New Project
+
+```bash
+pacioli init
+```
+
+Creates:
+- `templates/` - HTML templates (invoice, quotation, receipt)
+- `examples/` - Sample JSON files to get started
+- `customers/` - Customer database directory
+- `config/` - Your freelancer profile
+- `output/` - Generated PDFs
+- `.metadata.json` - Auto-numbering state
+
+### Generate Documents
+
+```bash
+# Invoice (for billing completed work)
+pacioli generate invoice data/invoice.json --customer customers/acme-corp.json
+
+# Quotation (for price estimates before work begins)
+pacioli generate quotation data/quote.json --customer customers/demo-company.json
+
+# Receipt (for payment confirmation)
+pacioli generate receipt data/receipt.json --customer customers/test-customer.json
+```
+
+### Auto-Numbering
+
+Set `"documentNumber": "auto"` in your JSON file:
+
+```json
+{
+  "documentNumber": "auto",
+  "issueDate": "2024-11-12",
+  ...
+}
+```
+
+Pacioli generates sequential numbers that reset each month:
+- First invoice in Nov 2024: `INV-202411-001`
+- Second invoice: `INV-202411-002`
+- First invoice in Dec 2024: `INV-202412-001` (counter resets)
+
+### Customer Database
+
+Store customer data separately for reusability:
+
+**customers/acme-corp.json:**
+```json
+{
+  "name": "นาย ทดสอบ ตัวอย่าง",
+  "company": "บริษัท เดโมนิค จำกัด",
+  "address": "เลขที่ 456 ถ. สาทร กรุงเทพมหานคร 10120",
+  "taxId": "0-1055-12345-67-8",
+  "phone": "02-111-2222"
+}
+```
+
+Use this customer file for all their invoices/receipts - update once, use everywhere.
+
+## Document Types
+
+### Invoice
+- For billing completed work
+- Includes due date and optional payment terms
+- Tax type: Usually "withholding" (deducted from total)
+
+### Quotation
+- For price estimates before work begins
+- Includes validity period
+- Tax type: Usually "vat" (added to total)
+- Optional payment terms for outlining milestones
+
+### Receipt
+- For payment confirmation
+- Shows payment date, method, and reference number
+- Optional payment terms for context
+
+## Configuration
+
+### Freelancer Profile
+
+Create `config/freelancer.json`:
+
+```json
+{
+  "name": "นายสมชาย ใจดี",
+  "title": "Full-Stack Developer",
+  "email": "somchai@example.com",
+  "phone": "081-234-5678",
+  "address": "123 ถนนสุขุมวิท กรุงเทพมหานคร 10110",
+  "taxId": "1-2345-67890-12-3",
+  "bankInfo": {
+    "bankName": "ธนาคารกสิกรไทย",
+    "accountName": "นายสมชาย ใจดี",
+    "accountNumber": "123-4-56789-0",
+    "branch": "สาขาสีลม"
+  },
+  "signature": "config/signature.png"
+}
+```
+
+### Document Data Format
+
+**Invoice Example:**
+```json
+{
+  "documentNumber": "auto",
+  "issueDate": "2024-11-12",
+  "dueDate": "2024-11-30",
+  "items": [
+    {
+      "description": "Website Development",
+      "quantity": 1,
+      "unit": "โครงการ",
+      "unitPrice": 50000
+    }
+  ],
+  "taxType": "withholding",
+  "taxRate": 0.03,
+  "taxLabel": "หัก ณ ที่จ่าย 3%",
+  "paymentTerms": [
+    "ชำระเต็มจำนวนภายใน 30 วัน",
+    "โอนเงินเข้าบัญชีธนาคาร"
+  ],
+  "notes": "ขอบคุณที่ใช้บริการครับ"
+}
+```
+
+See `examples/` directory after running `pacioli init` for complete examples.
+
+## Customization
+
+### Edit Templates
+
+After initialization, templates are copied to your project:
+
+```bash
+templates/
+├── invoice.html       # Dark blue theme
+├── quotation.html     # Purple theme
+└── receipt.html       # Green theme
+```
+
+Edit these HTML files to:
+- Change colors and fonts
+- Add your logo
+- Modify layout
+- Add custom fields
+
+Templates use `{{placeholder}}` syntax for data injection.
+
+### Tax Calculations
+
+**Withholding Tax** (common for freelancers in Thailand):
+```
+Total = Subtotal - (Subtotal × Tax Rate)
+```
+Example: 50,000 - (50,000 × 0.03) = 48,500 THB
+
+**VAT** (Value Added Tax):
+```
+Total = Subtotal + (Subtotal × Tax Rate)
+```
+Example: 50,000 + (50,000 × 0.07) = 53,500 THB
+
+## Advanced Usage
+
+### Custom Output Path
+
+```bash
+pacioli generate invoice data.json --customer customer.json --output custom/path.pdf
+```
+
+### Alternative Profile
+
+```bash
+pacioli generate invoice data.json --customer customer.json --profile config/freelancer-alt.json
+```
+
+### Force Overwrite During Init
+
+```bash
+pacioli init --force
+```
+
+## Optional: Luca AI Assistant
+
+This tool also includes **Luca**, an AI assistant for [Claude Code](https://claude.com/claude-code) that generates documents through natural conversation:
 
 ```
 @luca I need an invoice for the web design project I just finished for ABC Company
 ```
 
 Luca will:
-- Ask you the right questions (customer info, project details, payment terms)
-- Handle Thai tax calculations automatically (withholding vs VAT)
-- Generate a beautiful PDF in A4 format
-- Draft a professional email template to send with it
-- Keep track of document numbers automatically
+- Ask you the right questions
+- Create the JSON files
+- Generate the PDF
+- Draft a professional email template
 
-Perfect for freelancers who want to spend less time on paperwork and more time doing actual work.
+Perfect for those who prefer conversation over command-line.
 
-## Quick Start
-
-### Installation
+## Development
 
 ```bash
+# Clone repository
+git clone https://github.com/yourusername/pacioli.git
+cd pacioli
+
 # Install dependencies
 bun install
 
-# Setup your info (one-time)
-cp config/freelancer.example.json config/freelancer.json
-# Edit config/freelancer.json with your details
+# Run locally
+bun run src/cli.ts init
+bun run src/cli.ts generate invoice examples/invoice.json --customer customers/acme-corp.json
+
+# Link for global testing
+bun link
+pacioli init
+
+# Run tests
+bun test
 ```
 
-### Using Luca (Recommended)
-
-Just tag `@luca` in Claude Code and describe what you need:
-
-```
-@luca create an invoice for the mobile app project
-```
-
-```
-@luca I need a quotation for a new client - web redesign project
-```
-
-```
-@luca generate a receipt for the payment I just received
-```
-
-Luca handles everything: gathering details, creating files, generating PDFs, and drafting emails.
-
-## What You Get
-
-Three types of professional documents with distinct color themes:
-
-| Type | Color | When to Use |
-|------|-------|-------------|
-| **Invoice** | Dark Blue (#2c3e50) | Bill clients for completed work |
-| **Quotation** | Purple (#8e44ad) | Send price estimates before starting |
-| **Receipt** | Green (#27ae60) | Confirm payments received |
-
-Each document includes:
-- Auto-numbering (e.g., INV-202410-001)
-- Thai language support with Buddhist calendar dates
-- Automatic tax calculations (withholding or VAT)
-- Your branding (name, contact, bank details)
-- Professional formatting ready to print
-
-## How It Works
-
-Behind the scenes, Luca uses a simple but powerful workflow:
-
-1. **Conversation** → Luca gathers all required information through natural chat
-2. **Validation** → Creates properly formatted JSON with correct schema
-3. **Generation** → Renders HTML templates to PDF using Puppeteer
-4. **Delivery** → Provides the PDF + email template ready to send
-
-All documents are A4 format, professionally styled, and include Thai number formatting with proper Buddhist Era dates.
-
-## Alternative: Traditional CLI Usage
-
-If you prefer command-line tools or want to integrate this into scripts:
+## Publishing to npm/Bun
 
 ```bash
-bun run generate <type> <input-json> [options]
+# Login to npm
+npm login
+
+# Publish
+bun publish
 ```
 
-**Examples:**
+After publishing, users can run:
 ```bash
-bun run generate invoice examples/invoice-auto.json
-bun run generate quotation examples/quotation.json --output custom/path.pdf
-bun run generate receipt examples/receipt.json
+bunx pacioli init
 ```
 
-See the `examples/` folder for sample JSON files you can use as templates.
+## Requirements
 
-## Configuration
+- **Bun** ≥ 1.0.0
+- **Puppeteer** (installed automatically)
 
-Your freelancer information is stored once in `config/freelancer.json`:
-
-```json
-{
-  "name": "Your Name",
-  "title": "Your Title",
-  "email": "your@email.com",
-  "phone": "08-1234-5678",
-  "address": "Your Address",
-  "taxId": "1-2345-67890-12-3",
-  "bankInfo": {
-    "bankName": "Bank Name",
-    "accountName": "Account Name",
-    "accountNumber": "123-456-789-0"
-  }
-}
-```
-
-This information appears on all your documents. Set it once, use it forever.
-
-## Auto-Numbering
-
-Documents are automatically numbered with the format `PREFIX-YYYYMM-NNN`:
-- **Invoice**: `INV-202410-001`, `INV-202410-002`, ...
-- **Quotation**: `QT-202410-001`, `QT-202410-002`, ...
-- **Receipt**: `REC-202410-001`, `REC-202410-002`, ...
-
-Counters reset each month and increment automatically. Luca handles this for you, or you can set `"documentNumber": "auto"` in JSON files when using CLI mode.
-
-Metadata is stored in `.metadata.json` (gitignored by default).
-
-## Tax Calculations
-
-The tool handles Thai tax automatically:
-
-- **Withholding Tax (3%)**: Deducted from subtotal (common for freelancers)
-  - Example: ฿53,750 - ฿1,612.50 = ฿52,137.50
-- **VAT (7%)**: Added to subtotal
-  - Example: ฿196,000 + ฿13,720 = ฿209,720
-
-Luca helps you choose the right tax type based on your situation.
-
-## Tech Stack
-
-Built with:
-- **Bun** - Fast JavaScript runtime
-- **TypeScript** - Type-safe code
-- **Puppeteer** - HTML to PDF rendering
-- **HTML/CSS** - Professional templates with Thai font support (Noto Sans Thai)
-
----
-
-## Advanced: JSON Schema Reference
-
-If you're using CLI mode or integrating with other tools, here are the complete JSON schemas:
-
-<details>
-<summary><strong>Invoice Schema</strong></summary>
-
-```json
-{
-  "documentNumber": "INV-2024-001",
-  "issueDate": "2024-10-15",
-  "dueDate": "2024-10-30",
-  "customer": {
-    "name": "Customer Name",
-    "company": "Company Name",
-    "address": "Full Address",
-    "taxId": "Tax ID",
-    "phone": "Phone (optional)"
-  },
-  "items": [
-    {
-      "description": "Service description",
-      "quantity": 15,
-      "unit": "hrs",
-      "unitPrice": 750.00
-    }
-  ],
-  "taxRate": 0.03,
-  "taxType": "withholding",
-  "taxLabel": "หักภาษี ณ ที่จ่าย (3%)",
-  "paymentTerms": ["Optional payment terms"],
-  "notes": "Optional notes"
-}
-```
-
-**Key Fields:**
-- `documentNumber`: Use "auto" for auto-numbering
-- `dueDate`: Payment deadline
-- `taxType`: "withholding" (deducted) or "vat" (added)
-- `paymentTerms`: Optional array of payment milestones
-
-</details>
-
-<details>
-<summary><strong>Quotation Schema</strong></summary>
-
-```json
-{
-  "documentNumber": "QT-2024-001",
-  "issueDate": "2024-10-15",
-  "validUntil": "2024-11-15",
-  "customer": { /* same as invoice */ },
-  "items": [ /* same as invoice */ ],
-  "taxRate": 0.07,
-  "taxType": "vat",
-  "taxLabel": "ภาษีมูลค่าเพิ่ม 7%",
-  "paymentTerms": ["Optional payment terms"],
-  "notes": "Optional notes"
-}
-```
-
-**Differences from Invoice:**
-- `validUntil` instead of `dueDate` (quote expiry date)
-- Typically uses VAT instead of withholding tax
-
-</details>
-
-<details>
-<summary><strong>Receipt Schema</strong></summary>
-
-```json
-{
-  "documentNumber": "REC-2024-001",
-  "issueDate": "2024-10-15",
-  "paymentDate": "2024-10-15",
-  "paymentMethod": "Bank Transfer",
-  "referenceNumber": "INV-2024-001",
-  "customer": { /* same as invoice */ },
-  "items": [ /* same as invoice */ ],
-  "taxRate": 0.03,
-  "taxType": "withholding",
-  "taxLabel": "หักภาษี ณ ที่จ่าย (3%)",
-  "paidAmount": 52137.50,
-  "paymentTerms": ["Optional payment context"],
-  "notes": "Payment received"
-}
-```
-
-**Differences from Invoice:**
-- `paymentDate`: When payment was received
-- `paymentMethod`: How payment was made
-- `referenceNumber`: Original invoice reference (optional)
-- `paidAmount`: Actual amount received
-
-</details>
-
-<details>
-<summary><strong>Project Structure</strong></summary>
+## Project Structure
 
 ```
-invoice-gen/
+pacioli/
 ├── src/
-│   ├── index.ts          # CLI entry point
-│   ├── generator.ts      # PDF generation
-│   ├── validator.ts      # Schema validation
-│   ├── utils.ts          # Calculations & formatting
-│   └── metadata.ts       # Auto-numbering logic
-├── templates/
-│   ├── invoice.html      # Invoice template (dark blue)
-│   ├── quotation.html    # Quotation template (purple)
-│   └── receipt.html      # Receipt template (green)
-├── config/
-│   └── freelancer.json   # Your info (gitignored)
-├── data/                 # Your JSON inputs
-├── output/               # Generated PDFs
-└── examples/             # Sample JSON files
+│   ├── cli.ts              # Main CLI entry point
+│   ├── commands/
+│   │   ├── init.ts         # Init command
+│   │   └── generate.ts     # Generate command
+│   ├── generator.ts        # PDF generation
+│   ├── validator.ts        # JSON validation
+│   ├── metadata.ts         # Auto-numbering system
+│   └── utils.ts            # Helper functions
+├── templates/              # HTML templates
+├── examples/               # Sample JSON files
+├── customers/              # Sample customer database
+├── config/                 # Configuration examples
+└── package.json            # Package metadata
 ```
 
-</details>
+## Why "Pacioli"?
 
----
+Luca Pacioli (1445-1517) was an Italian mathematician and Franciscan friar who published the first comprehensive book on double-entry bookkeeping in 1494. His work, *Summa de arithmetica*, laid the foundation for modern accounting and is still used today. Pacioli's system of debits and credits revolutionized commerce and enabled the Renaissance banking system.
+
+This tool honors his legacy by making financial document generation accessible to modern freelancers and small businesses.
 
 ## License
 
-MIT
+MIT License - see LICENSE file for details
 
-## Author
+## Contributing
 
-Created for personal freelance work. Customize as needed for your business.
+Contributions welcome! Please open an issue or pull request.
+
+## Support
+
+- **Issues**: https://github.com/yourusername/pacioli/issues
+- **Discussions**: https://github.com/yourusername/pacioli/discussions
+
+---
+
+Made with ❤️ for freelancers everywhere

@@ -1,11 +1,47 @@
 {
-  "name": "invoice-gen",
+  "name": "pacioli",
   "version": "1.0.0",
-  "description": "CLI tool for generating financial documents (invoices, quotations, receipts) as PDF",
-  "module": "src/index.ts",
+  "description": "CLI tool for generating professional financial documents (invoices, quotations, receipts) for freelancers. Named after Luca Pacioli, father of accounting.",
+  "author": "Peerasak Unsakon <clonezer@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "invoice",
+    "quotation",
+    "receipt",
+    "pdf",
+    "freelance",
+    "accounting",
+    "financial-documents",
+    "cli",
+    "bun"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peerasak-u/luca.git"
+  },
+  "homepage": "https://github.com/peerasak-u/luca#readme",
+  "bugs": {
+    "url": "https://github.com/peerasak-u/luca/issues"
+  },
+  "bin": {
+    "pacioli": "./src/cli.ts"
+  },
+  "files": [
+    "src",
+    "templates",
+    "examples",
+    "customers",
+    "config",
+    "README.md",
+    "LICENSE"
+  ],
+  "module": "src/cli.ts",
   "type": "module",
-  "private": true,
+  "engines": {
+    "bun": ">=1.0.0"
+  },
   "scripts": {
+    "dev": "bun run src/cli.ts",
     "generate": "bun run src/index.ts",
     "test": "bun test",
     "test:watch": "bun test --watch"

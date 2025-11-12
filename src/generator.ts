@@ -3,6 +3,9 @@
  */
 
 import puppeteer from "puppeteer";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { existsSync } from "fs";
 import { calculateTotals, formatNumber, formatDateThai } from "./utils";
 import type {
   DocumentData,
@@ -12,6 +15,9 @@ import type {
   FreelancerConfig,
   Customer,
 } from "./validator";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * Load signature image as base64 data URI
@@ -178,6 +184,36 @@ async function injectDataIntoTemplate(
 }
 
 /**
+ * Resolve template path
+ * Looks in user's local templates/ first, then falls back to package templates/
+ */
+function resolveTemplatePath(type: string): string {
+  // Try user's local templates first (in current working directory)
+  const localTemplatePath = join(process.cwd(), "templates", `${type}.html`);
+  if (existsSync(localTemplatePath)) {
+    return localTemplatePath;
+  }
+
+  // Fall back to package's bundled templates
+  // When running from source: src/generator.ts -> ../templates/
+  // When running from installed: dist/generator.js -> ../templates/
+  const packageRoot = join(__dirname, "..");
+  const packageTemplatePath = join(packageRoot, "templates", `${type}.html`);
+
+  if (existsSync(packageTemplatePath)) {
+    return packageTemplatePath;
+  }
+
+  throw new Error(
+    `Template not found: ${type}.html\n` +
+    `  Searched in:\n` +
+    `    - ${localTemplatePath}\n` +
+    `    - ${packageTemplatePath}\n` +
+    `  Tip: Run 'pacioli init' to create templates/ directory`
+  );
+}
+
+/**
  * Generate PDF from document data
  */
 export async function generatePDF(
@@ -187,8 +223,8 @@ export async function generatePDF(
   config: FreelancerConfig,
   outputPath: string
 ): Promise<void> {
-  // Read template
-  const templatePath = `templates/${type}.html`;
+  // Resolve template path
+  const templatePath = resolveTemplatePath(type);
   const templateFile = Bun.file(templatePath);
 
   if (!(await templateFile.exists())) {

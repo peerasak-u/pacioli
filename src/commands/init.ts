@@ -362,7 +362,7 @@ Next steps:
   4. Add your customers:
      Create JSON files in customers/ directory
 
-📚 Documentation: https://github.com/yourusername/pacioli
+📚 Documentation: https://github.com/peerasak-u/pacioli
     `);
   } catch (error) {
     console.error("\n❌ Initialization failed:");

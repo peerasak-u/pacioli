@@ -258,7 +258,7 @@ Perfect for those who prefer conversation over command-line.
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/pacioli.git
+git clone https://github.com/peerasak-u/pacioli.git
 cd pacioli
 
 # Install dependencies
@@ -332,8 +332,8 @@ Contributions welcome! Please open an issue or pull request.
 
 ## Support
 
-- **Issues**: https://github.com/yourusername/pacioli/issues
-- **Discussions**: https://github.com/yourusername/pacioli/discussions
+- **Issues**: https://github.com/peerasak-u/pacioli/issues
+- **Discussions**: https://github.com/peerasak-u/pacioli/discussions
 
 ---
 

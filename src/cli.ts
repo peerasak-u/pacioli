@@ -57,7 +57,7 @@ Examples:
 For command-specific help:
   pacioli generate --help
 
-Learn more: https://github.com/yourusername/pacioli
+Learn more: https://github.com/peerasak-u/pacioli
   `);
 }
 

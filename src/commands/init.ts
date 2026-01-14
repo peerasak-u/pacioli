@@ -272,6 +272,11 @@ export async function initCommand(args: string[]) {
       const opencodeSkillsDest = join(targetDir, ".opencode/skill/pacioli-skill");
       console.log("  Creating .opencode/skill/pacioli-skill...");
       copyDirectory(skillsSource, opencodeSkillsDest, force);
+
+      // 3. .agent/skills/pacioli-skill (Antigravity)
+      const agentSkillsDest = join(targetDir, ".agent/skills/pacioli-skill");
+      console.log("  Creating .agent/skills/pacioli-skill...");
+      copyDirectory(skillsSource, agentSkillsDest, force);
     } else {
       console.warn(`  ⚠️  Agent skills not found at ${skillsSource}`);
     }

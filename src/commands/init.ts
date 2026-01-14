@@ -354,7 +354,7 @@ Next steps:
      # Then edit config/freelancer.json with your information
 
   2. Generate your first invoice:
-     pacioli generate invoice examples/invoice.json --customer customers/acme-corp.json
+     bunx pacioli generate invoice examples/invoice.json --customer customers/acme-corp.json
 
   3. Customize templates (optional):
      Edit files in templates/ to match your branding

@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="pacioli-icon.png">
     <meta name="description"
         content="โปรแกรมสร้าง Invoice / Quotation ฟรีสำหรับ Freelance และ Developer ใช้งานง่ายผ่าน Command Line">
@@ -136,15 +137,42 @@
                 <div class="step-content">
                     <h3>แก้ไข JSON Data</h3>
                     <p>กรอกข้อมูลรายการสินค้าในไฟล์ JSON ที่อ่านง่าย</p>
-                    <div class="code-snippet json-snippet">
-                        {
-                        "items": [
-                        {
-                        "desc": "Design",
-                        "price": 50000
-                        }
-                        ]
-                        }
+                    <div class="code-snippet">
+                        <pre><code class="language-json">{
+  "customerPath": "customers/somchai.json",
+  "documentNumber": "auto",
+  "issueDate": "2026-01-15",
+  "dueDate": "2026-02-14",
+  "items": [
+    {
+      "description": "บริการให้คำปรึกษาเทคโนโลยี",
+      "quantity": 2,
+      "unit": "ชม.",
+      "unitPrice": 800.00
+    },
+    {
+      "description": "ออกแบบ UI/UX สำหรับ 3 หน้าจอ",
+      "quantity": 3,
+      "unit": "หน้า",
+      "unitPrice": 2500.00
+    },
+    {
+      "description": "พัฒนาปลั๊กอิน WordPress",
+      "quantity": 1,
+      "unit": "โปรเจค",
+      "unitPrice": 35000.00
+    }
+  ],
+  "taxRate": 0.03,
+  "taxType": "withholding",
+  "taxLabel": "หักภาษี ณ ที่จ่าย (3%)",
+  "paymentTerms": [
+    "เริ่มงาน: 30%",
+    "จบ Phase 1: 30%",
+    "จบงาน: 40%"
+  ],
+  "notes": "ขอบคุณที่ใช้บริการ | หากมีคำถามกรุณาติดต่อ"
+}</code></pre>
                     </div>
                 </div>
             </div>
@@ -155,7 +183,7 @@
                     <h3>Generate PDF</h3>
                     <p>สั่งแค่บรรทัดเดียว ได้ PDF สวยงามพร้อมส่งลูกค้า</p>
                     <div class="code-snippet">
-                        $ bunx pacioli generate invoice data.json --customer acme.json
+                        $ bunx pacioli generate quotation somechai-web.json
                     </div>
                 </div>
             </div>
@@ -191,7 +219,7 @@
                     <div class="chat-bubble ai">
                         <span>เข้าใจแล้วครับ กำลังเตรียมข้อมูล...</span>
                         <div class="code-snippet-mini">
-                            $ bunx pacioli generate invoice data.json --customer customers/somchai.json
+                            $ bunx pacioli generate invoice somchai-web.json
                         </div>
                         <span>ผมสร้างไฟล์ <code>invoice-202501-001.pdf</code> ให้เรียบร้อยแล้วครับ</span>
                         <div class="chat-attachment">📄 invoice-202501-001.pdf</div>
@@ -253,7 +281,7 @@
         <div class="container container-narrow">
             <h2>ใช้งานฟรี ตลอดไป</h2>
             <p>Pacioli เป็น Open Source Software (MIT License) เราเชื่อว่า Freelance ควรมีเครื่องมือดีๆ
-                ใช้จึุงเปิดให้ใช้ฟรี</p>
+                ใช้จึงเปิดให้ใช้ฟรี</p>
 
             <div class="card bg-gray" style="margin-top: 40px; text-align: left;">
                 <h3 class="text-center" style="margin-bottom: 24px;">Community Edition</h3>
@@ -301,6 +329,8 @@
         </div>
     </section>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 </body>
 
 </html>

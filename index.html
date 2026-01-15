@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacioli - สร้างเอกสารการเงินระดับโปรด้วย Command Line</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="pacioli-icon.png">
+    <meta name="description"
+        content="โปรแกรมสร้าง Invoice / Quotation ฟรีสำหรับ Freelance และ Developer ใช้งานง่ายผ่าน Command Line">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="logo">
+                <img src="pacioli-icon.png" alt="Pacioli Logo">
+                <span>Pacioli</span>
+            </div>
+            <a href="https://github.com/peerasak-u/pacioli" target="_blank" class="btn btn-sm btn-github">
+                <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
+                    <path
+                        d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                    </path>
+                </svg>
+                <span>GitHub</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 1. OUTCOME (Hero) -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <div class="badge">Open Source Project</div>
+            <h1 class="hero-title">ออกเอกสารการเงินสำหรับ Freelance<br>ง่ายๆ ผ่าน Command Line</h1>
+            <p class="hero-subtitle">
+                ลืม Excel และ Word ไปได้เลย สร้าง Invoice, Quotation ที่ถูกต้องตามหลักบัญชี<br>
+                ด้วยการพิมพ์คำสั่งบรรทัดเดียว
+            </p>
+            <div class="cta-group">
+                <div class="code-block-display">
+                    <code>bunx pacioli@latest init</code>
+                    <button class="copy-btn"
+                        onclick="navigator.clipboard.writeText('bunx pacioli@latest init')">Copy</button>
+                </div>
+                <p class="sub-cta-text">ไม่ต้องติดตั้ง ลงแล้วใช้ได้เลยทันที</p>
+            </div>
+            <div class="hero-image-container" style="margin-top: 60px;">
+                <img src="example.png" alt="Pacioli Example Documents"
+                    style="max-width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #E0E0E0;">
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. PROBLEM -->
+    <section class="section problem-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>เสียเวลากับเรื่องที่ไม่ใช่ "งานของคุณ" อยู่หรือเปล่า?</h2>
+            </div>
+            <div class="grid-3">
+                <div class="card bg-gray">
+                    <h3>❌ จัดหน้าใน Word ไม่เคยตรง</h3>
+                    <p>ขยับรูปนิดเดียว ข้อความเลื่อนทั้งหน้า เสียเวลาจัดหน้ามากกว่าทำงานจริง</p>
+                </div>
+                <div class="card bg-gray">
+                    <h3>❌ ลืมแก้เลขที่เอกสาร</h3>
+                    <p>Copy ไฟล์เก่ามาแก้ แต่ลืมเปลี่ยนเลขที่ Invoice จบไม่สวยกับลูกค้าแน่นอน</p>
+                </div>
+                <div class="card bg-gray">
+                    <h3>❌ คำนวณภาษีผิดๆ ถูกๆ</h3>
+                    <p>Vat 7% หรือ หัก ณ ที่จ่าย 3% คำนวณเองพลาดง่าย ปวดหัวตอนส่งสรรพากร</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. FIT -->
+    <section class="section fit-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>เครื่องมือนี้ทำมาเพื่อใคร?</h2>
+            </div>
+            <div class="checklist-container">
+                <div class="checklist-item">
+                    <span class="check-icon">✓</span>
+                    <div class="checklist-content">
+                        <h3>Freelance Developer & Designer</h3>
+                        <p>คนที่คุ้นเคยกับการใช้ Terminal และอยากจัดการเอกสารเหมือนการเขียนโค้ด</p>
+                    </div>
+                </div>
+                <div class="checklist-item">
+                    <span class="check-icon">✓</span>
+                    <div class="checklist-content">
+                        <h3>Indie Hacker & Solopreneur</h3>
+                        <p>One Person Business ที่ต้องการความรวดเร็ว มาตรฐาน และไม่อยากเสียเงินรายเดือนแพงๆ</p>
+                    </div>
+                </div>
+                <div class="checklist-item">
+                    <span class="check-icon">✓</span>
+                    <div class="checklist-content">
+                        <h3>คนที่ไม่ชอบ UI รกๆ</h3>
+                        <p>เบื่อกับการคลิกเมนูซ้อนเมนูเพื่อสร้างเอกสารใบเดียว</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. FLOW -->
+    <section class="section flow-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>Workflow ที่เรียบง่ายที่สุด</h2>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <div class="step-content">
+                    <h3>Init โปรเจกต์</h3>
+                    <p>สร้างโครงสร้างโปรเจกต์พร้อม Template และ Config เริ่มต้น</p>
+                    <div class="code-snippet">
+                        $ bunx pacioli@latest init
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <div class="step-content">
+                    <h3>แก้ไข JSON Data</h3>
+                    <p>กรอกข้อมูลรายการสินค้าในไฟล์ JSON ที่อ่านง่าย</p>
+                    <div class="code-snippet json-snippet">
+                        {
+                        "items": [
+                        {
+                        "desc": "Design",
+                        "price": 50000
+                        }
+                        ]
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <div class="step-content">
+                    <h3>Generate PDF</h3>
+                    <p>สั่งแค่บรรทัดเดียว ได้ PDF สวยงามพร้อมส่งลูกค้า</p>
+                    <div class="code-snippet">
+                        $ bunx pacioli generate invoice data.json --customer acme.json
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 5. AGENT SKILL (Bonus) -->
+    <section class="section agent-section bg-black text-white">
+        <div class="container">
+            <div class="grid-2 align-center">
+                <div>
+                    <div class="badge badge-white">New Feature</div>
+                    <h2>สอน AI ให้เป็นนักบัญชีของคุณ</h2>
+                    <p class="text-large">
+                        Pacioli มาพร้อมกับ <strong>"Agent Skills"</strong> ที่ออกแบบมาเพื่อให้ AI (เช่น Claude Code,
+                        Antigravity)
+                        เข้าใจโครงสร้างงานเอกสารของคุณ
+                    </p>
+                    <ul class="feature-list">
+                        <li>สั่งงานเป็นภาษาธรรมชาติ "ขอใบเสนอราคาให้คุณสมชายหน่อย"</li>
+                        <li>AI เข้าใจ Context ของลูกค้าและโปรเจกต์เก่า</li>
+                        <li>ลดงาน Manual เหลือ 0%</li>
+                    </ul>
+                </div>
+                <div class="agent-preview">
+                    <div class="chat-bubble user">
+                        ขอ Invoice ค่าทำเว็บให้คุณ Somchai ยอด 50,000 ครับ
+                    </div>
+                    <div class="chat-bubble ai-action">
+                        <span class="action-icon">⚡</span> Used skill: <code>pacioli-skills</code>
+                    </div>
+                    <div class="chat-bubble ai">
+                        <span>เข้าใจแล้วครับ กำลังเตรียมข้อมูล...</span>
+                        <div class="code-snippet-mini">
+                            $ bunx pacioli generate invoice data.json --customer customers/somchai.json
+                        </div>
+                        <span>ผมสร้างไฟล์ <code>invoice-202501-001.pdf</code> ให้เรียบร้อยแล้วครับ</span>
+                        <div class="chat-attachment">📄 invoice-202501-001.pdf</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FAQ -->
+    <section class="section faq-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2>คำถามที่พบบ่อย (Q&A)</h2>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>รองรับภาษาไทยไหม?</h3>
+                    <p>รองรับ 100% รวมถึงการตัดคำ ฟอนต์ และหน่วยเงินบาท (THB)</p>
+                </div>
+                <div class="faq-item">
+                    <h3>คำนวณภาษีให้อัตโนมัติไหม?</h3>
+                    <p>ถูกต้อง ระบบคำนวณ VAT 7% และหัก ณ ที่จ่าย (WHT) ให้ตามที่คุณตั้งค่า</p>
+                </div>
+                <div class="faq-item">
+                    <h3>ข้อมูลถูกส่งไปที่ไหน?</h3>
+                    <p>ทุกอย่างทำงาน Offline บนเครื่องของคุณ ข้อมูล 100% อยู่ที่คุณ เป็น Privacy-first design</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. WHY PACIOLI -->
+    <section class="section why-section">
+        <div class="container">
+            <div class="grid-2 align-center">
+                <div>
+                    <img src="pacioli.png" alt="Luca Pacioli"
+                        style="max-width: 100%; border-radius: 12px; filter: grayscale(100%);">
+                </div>
+                <div>
+                    <h2>Why "Pacioli"?</h2>
+                    <p style="margin-bottom: 16px;">
+                        <strong>Luca Pacioli (1445-1517)</strong> คือบิดาแห่งการบัญชี และผู้คิดค้นระบบบัญชีคู่
+                        (Double-entry bookkeeping)
+                        ที่เรายังใช้กันอยู่ในปัจจุบัน
+                    </p>
+                    <p style="color: #666;">
+                        เครื่องมือนี้ถูกสร้างขึ้นเพื่อเป็นเกียรติแก่เขา โดยมีเป้าหมายเพื่อช่วยให้ Freelance ยุคใหม่
+                        สามารถจัดการเอกสารการเงินได้อย่างถูกต้อง แม่นยำ และเป็นมืออาชีพ เหมือนมีนักบัญชีส่วนตัว
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. OFFER -->
+    <section class="section offer-section text-center">
+        <div class="container container-narrow">
+            <h2>ใช้งานฟรี ตลอดไป</h2>
+            <p>Pacioli เป็น Open Source Software (MIT License) เราเชื่อว่า Freelance ควรมีเครื่องมือดีๆ
+                ใช้จึุงเปิดให้ใช้ฟรี</p>
+
+            <div class="card bg-gray" style="margin-top: 40px; text-align: left;">
+                <h3 class="text-center" style="margin-bottom: 24px;">Community Edition</h3>
+                <div class="checklist-item" style="border: none; padding: 12px 0;">
+                    <span class="check-icon">✓</span>
+                    <span>สร้างเอกสารไม่จำกัด (Invoice, Quotation, Receipt)</span>
+                </div>
+                <div class="checklist-item" style="border: none; padding: 12px 0;">
+                    <span class="check-icon">✓</span>
+                    <span>จัดการฐานข้อมูลลูกค้าได้ไม่จำกัด</span>
+                </div>
+                <div class="checklist-item" style="border: none; padding: 12px 0;">
+                    <span class="check-icon">✓</span>
+                    <span>ใช้งานฟรี 100% (MIT License)</span>
+                </div>
+                <div class="text-center" style="margin-top: 24px;">
+                    <a href="https://github.com/peerasak-u/pacioli" target="_blank" class="btn btn-github">
+                        <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
+                            <path
+                                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                            </path>
+                        </svg>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 9. FINAL CTA -->
+    <section class="section footer-cta" id="install">
+        <div class="container text-center">
+            <h2>เริ่มใช้งานได้เลยทันที</h2>
+            <p>ไม่ต้องสมัครสมาชิก ไม่ต้องกรอกบัตรเครดิต</p>
+            <div class="cta-large">
+                <code>bunx pacioli@latest init</code>
+            </div>
+            <p class="footer-credit">Built with ❤️ by <a href="https://peerasak.com" target="_blank"
+                    style="color: inherit; text-decoration: underline;">Peerasak</a> for Thai Freelancers</p>
+        </div>
+    </section>
+
+</body>
+
+</html>

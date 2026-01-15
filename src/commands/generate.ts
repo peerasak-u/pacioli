@@ -171,44 +171,59 @@ export async function generateCommand(args: string[]) {
     process.exit(1);
   }
 
-  if (!options.customerPath) {
-    console.error("❌ Error: Customer JSON file path is required (use --customer)");
-    console.error('\nRun "pacioli generate --help" for usage information');
-    process.exit(1);
-  }
+  // Resolve partial paths (we might need inputPath to find customerPath)
+  const initialPaths = resolvePaths(options);
 
-  // Resolve all paths relative to current directory
-  const paths = resolvePaths(options);
-
-  // Check if input file exists
-  if (!(await fileExists(paths.inputPath!))) {
+  // Check if input file exists first
+  if (!(await fileExists(initialPaths.inputPath!))) {
     console.error(`❌ Error: Input file not found: ${options.inputPath}`);
-    console.error(`   Looking in: ${paths.inputPath}`);
-    process.exit(1);
-  }
-
-  // Check if customer file exists
-  if (!(await fileExists(paths.customerPath!))) {
-    console.error(`❌ Error: Customer file not found: ${options.customerPath}`);
-    console.error(`   Looking in: ${paths.customerPath}`);
-    process.exit(1);
-  }
-
-  // Check if profile file exists
-  if (!(await fileExists(paths.configPath))) {
-    console.error(`❌ Error: Profile file not found: ${options.configPath}`);
-    console.error(`   Looking in: ${paths.configPath}`);
-    console.error("\n💡 Tip: Did you forget to run 'pacioli init'?");
-    console.error("   Or copy config/freelancer.example.json to config/freelancer.json");
+    console.error(`   Looking in: ${initialPaths.inputPath}`);
     process.exit(1);
   }
 
   try {
     console.log(`\n📄 Generating ${options.type}...`);
 
+    // Load document data early to check for customerPath
+    console.log(`📋 Loading data from ${options.inputPath}...`);
+    const data = await readJSON<DocumentData>(initialPaths.inputPath!);
+
+    // Determine final customer path
+    let customerPath = initialPaths.customerPath;
+
+    // If no CLI customer path, check the JSON data
+    if (!customerPath && data.customerPath) {
+      // Resolve relative to CWD (same as CLI args)
+      customerPath = join(process.cwd(), data.customerPath);
+      console.log(`   Found customer path in JSON: ${data.customerPath}`);
+    }
+
+    // Now validate we have a customer path
+    if (!customerPath) {
+      console.error("❌ Error: Customer path not found.");
+      console.error("   Please provide it via --customer <path>");
+      console.error('   OR add "customerPath": "path/to/customer.json" in your input JSON.');
+      process.exit(1);
+    }
+
+    // Check if customer file exists
+    if (!(await fileExists(customerPath))) {
+      console.error(`❌ Error: Customer file not found: ${customerPath}`);
+      process.exit(1);
+    }
+
+    // Check if profile file exists
+    if (!(await fileExists(initialPaths.configPath))) {
+      console.error(`❌ Error: Profile file not found: ${options.configPath}`);
+      console.error(`   Looking in: ${initialPaths.configPath}`);
+      console.error("\n💡 Tip: Did you forget to run 'pacioli init'?");
+      console.error("   Or copy config/freelancer.example.json to config/freelancer.json");
+      process.exit(1);
+    }
+
     // Load freelancer profile
     console.log(`📋 Loading profile from ${options.configPath}...`);
-    const config = await readJSON<FreelancerConfig>(paths.configPath);
+    const config = await readJSON<FreelancerConfig>(initialPaths.configPath);
 
     // Validate profile
     const configValidation = validateFreelancerConfig(config);
@@ -219,8 +234,8 @@ export async function generateCommand(args: string[]) {
     }
 
     // Load customer data
-    console.log(`👤 Loading customer from ${options.customerPath}...`);
-    const customer = await readJSON<Customer>(paths.customerPath!);
+    console.log(`👤 Loading customer from ${customerPath}...`);
+    const customer = await readJSON<Customer>(customerPath);
 
     // Validate customer
     const customerValidation = validateCustomer(customer);
@@ -229,10 +244,6 @@ export async function generateCommand(args: string[]) {
       customerValidation.errors.forEach((err) => console.error(`   - ${err}`));
       process.exit(1);
     }
-
-    // Load document data
-    console.log(`📋 Loading data from ${options.inputPath}...`);
-    const data = await readJSON<DocumentData>(paths.inputPath!);
 
     // Validate document data based on type
     let validation;
@@ -267,7 +278,7 @@ export async function generateCommand(args: string[]) {
     const outputPath = getOutputPath(
       options.type,
       resolvedDocumentNumber,
-      paths.outputPath
+      initialPaths.outputPath
     );
 
     // Generate PDF

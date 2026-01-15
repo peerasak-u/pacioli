@@ -19,6 +19,7 @@ export interface BaseDocument {
   documentNumber: string;
   issueDate: string;
   customer?: Customer;
+  customerPath?: string;
   items: LineItem[];
   taxRate: number;
   taxType: "withholding" | "vat";

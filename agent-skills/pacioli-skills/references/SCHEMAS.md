@@ -41,6 +41,7 @@ File: `customers/<customer-slug>.json`
 
 All documents share these common fields:
 - `documentNumber`: String. Use "auto" for auto-numbering (YYYYMM-001).
+- `customerPath`: String (Optional). Path to the customer JSON file (relative to current directory).
 - `issueDate`: "YYYY-MM-DD"
 - `taxRate`: Number (0-1). e.g., 0.03 for 3%.
 - `taxType`: "withholding" (subtracts tax) or "vat" (adds tax).
@@ -53,6 +54,7 @@ File: `invoices/<file>.json`
 ```json
 {
   "documentNumber": "auto",
+  "customerPath": "customers/duke-of-milan.json",
   "issueDate": "2023-10-27",
   "dueDate": "2023-11-26",
   "taxRate": 0.03,

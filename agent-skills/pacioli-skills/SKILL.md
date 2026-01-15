@@ -18,7 +18,7 @@ bunx pacioli <command> [args]
 | Command | Usage |
 |---------|-------|
 | `init` | Initialize a new project structure with config and templates |
-| `generate <type> <path> --customer <path>` | Generate a PDF document (invoice, quotation, receipt) |
+| `generate <type> <path> [--customer <path>]` | Generate a PDF document (invoice, quotation, receipt) |
 | `help` | Show help message |
 | `version` | Show version |
 
@@ -41,7 +41,11 @@ See [references/SCHEMAS.md](references/SCHEMAS.md) for the format.
 Create a customer file (e.g., `customers/acme.json`) and an invoice file (e.g., `invoices/oct-service.json`).
 
 ```bash
+# Option 1: Provide customer via CLI flag
 bunx pacioli generate invoice invoices/oct-service.json --customer customers/acme.json
+
+# Option 2: Define customerPath inside oct-service.json (Recommended)
+bunx pacioli generate invoice invoices/oct-service.json
 ```
 
 ### 4. Generate a Quotation
@@ -69,6 +73,7 @@ When you run `init`, Pacioli creates:
 Data is provided via JSON files.
 - **Dates**: Use `YYYY-MM-DD` format.
 - **Auto-numbering**: Set `documentNumber` to `"auto"` to let Pacioli handle ID generation (e.g., `INV-202310-001`).
+- **Customer**: Link a customer using the `--customer` flag OR by adding `"customerPath": "customers/acme.json"` directly in your document JSON.
 - **Tax**: Supports "withholding" (deducted) and "vat" (added).
 
 For detailed JSON schemas and examples, see **[references/SCHEMAS.md](references/SCHEMAS.md)**.

@@ -13,17 +13,59 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="pacioli-icon.png">
     <meta name="description"
-        content="โปรแกรมสร้าง Invoice / Quotation ฟรีสำหรับ Freelance และ Developer ใช้งานง่ายผ่าน Command Line">
+        content="Pacioli คือโปรแกรมสร้าง Invoice, Quotation และเอกสารการเงินฟรีสำหรับ Freelance และ Developer ใช้งานง่ายผ่าน Command Line ไม่ต้องติดตั้ง สร้าง PDF สวยงามทันที">
+    <link rel="canonical" href="https://pacioli.peerasak.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pacioli.peerasak.com/">
+    <meta property="og:title" content="Pacioli - สร้างเอกสารการเงินระดับโปรด้วย Command Line">
+    <meta property="og:description"
+        content="Pacioli คือโปรแกรมสร้าง Invoice, Quotation และเอกสารการเงินฟรีสำหรับ Freelance และ Developer ใช้งานง่ายผ่าน Command Line ไม่ต้องติดตั้ง สร้าง PDF สวยงามทันที">
+    <meta property="og:image" content="https://pacioli.peerasak.com/pacioli.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://pacioli.peerasak.com/">
+    <meta name="twitter:title" content="Pacioli - สร้างเอกสารการเงินระดับโปรด้วย Command Line">
+    <meta name="twitter:description"
+        content="Pacioli คือโปรแกรมสร้าง Invoice, Quotation และเอกสารการเงินฟรีสำหรับ Freelance และ Developer ใช้งานง่ายผ่าน Command Line ไม่ต้องติดตั้ง สร้าง PDF สวยงามทันที">
+    <meta name="twitter:image" content="https://pacioli.peerasak.com/pacioli.png">
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Pacioli",
+      "operatingSystem": "Any (Command Line Interface)",
+      "applicationCategory": "FinanceApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "THB"
+      },
+      "description": "โปรแกรมสร้าง Invoice / Quotation ฟรีสำหรับ Freelance และ Developer ใช้งานง่ายผ่าน Command Line",
+      "image": "https://pacioli.peerasak.com/pacioli.png",
+      "author": {
+        "@type": "Person",
+        "name": "Peerasak"
+      }
+    }
+    </script>
 </head>
 
 <body>
 
     <nav class="navbar">
         <div class="container nav-content">
-            <div class="logo">
-                <img src="pacioli-icon.png" alt="Pacioli Logo">
+            <a href="/" class="logo" style="text-decoration: none; color: inherit;">
+                <picture style="display: contents;">
+                    <source srcset="pacioli-icon.webp" type="image/webp">
+                    <img src="pacioli-icon.png" alt="Pacioli Logo">
+                </picture>
                 <span>Pacioli</span>
-            </div>
+            </a>
             <a href="https://github.com/peerasak-u/pacioli" target="_blank" class="btn btn-sm btn-github">
                 <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
                     <path
@@ -53,8 +95,11 @@
                 <p class="sub-cta-text">ไม่ต้องติดตั้ง ลงแล้วใช้ได้เลยทันที</p>
             </div>
             <div class="hero-image-container" style="margin-top: 60px;">
-                <img src="example.png" alt="Pacioli Example Documents"
-                    style="max-width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #E0E0E0;">
+                <picture>
+                    <source srcset="example.webp" type="image/webp">
+                    <img src="example.png" alt="Pacioli Example Documents"
+                        style="max-width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #E0E0E0;">
+                </picture>
             </div>
         </div>
     </section>
@@ -200,8 +245,7 @@
                     <h2>สอน AI ให้เป็นนักบัญชีของคุณ</h2>
                     <p class="text-large">
                         Pacioli มาพร้อมกับ <strong>"Agent Skills"</strong> ที่ออกแบบมาเพื่อให้ AI (เช่น Claude Code,
-                        Antigravity)
-                        เข้าใจโครงสร้างงานเอกสารของคุณ
+                        OpenCode, Antigravity) เข้าใจโครงสร้างงานเอกสารของคุณ
                     </p>
                     <ul class="feature-list">
                         <li>สั่งงานเป็นภาษาธรรมชาติ "ขอใบเสนอราคาให้คุณสมชายหน่อย"</li>
@@ -257,8 +301,11 @@
         <div class="container">
             <div class="grid-2 align-center">
                 <div>
-                    <img src="pacioli.png" alt="Luca Pacioli"
-                        style="max-width: 100%; border-radius: 12px; filter: grayscale(100%);">
+                    <picture>
+                        <source srcset="pacioli.webp" type="image/webp">
+                        <img src="pacioli.png" alt="Luca Pacioli"
+                            style="max-width: 100%; border-radius: 12px; filter: grayscale(100%);">
+                    </picture>
                 </div>
                 <div>
                     <h2>Why "Pacioli"?</h2>

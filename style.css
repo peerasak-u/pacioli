@@ -137,6 +137,8 @@ body {
     align-items: center;
     gap: 16px;
     border: 1px solid var(--color-border);
+    max-width: 100%;
+    overflow-x: auto;
 }
 
 .copy-btn {
@@ -147,6 +149,7 @@ body {
     cursor: pointer;
     font-size: 0.8rem;
     font-family: var(--font-main);
+    flex-shrink: 0;
 }
 
 .sub-cta-text {
@@ -245,6 +248,7 @@ body {
 
 .step-content {
     flex: 1;
+    min-width: 0;
 }
 
 .code-snippet {
@@ -256,6 +260,7 @@ body {
     margin-top: 16px;
     font-size: 0.9rem;
     overflow-x: auto;
+    max-width: 100%;
 }
 
 .json-snippet {
@@ -392,11 +397,23 @@ body {
     .step-card {
         flex-direction: column;
         gap: 16px;
-        padding: 24px;
+        padding: 20px;
     }
 
     .step-number {
         font-size: 2rem;
+    }
+
+    .code-snippet {
+        padding: 12px;
+        font-size: 0.8rem;
+    }
+
+    /* Force code wrapping on mobile to avoid horizontal scroll */
+    .code-snippet pre,
+    .code-snippet code {
+        white-space: pre-wrap !important;
+        word-break: break-word !important;
     }
 
     .faq-grid {

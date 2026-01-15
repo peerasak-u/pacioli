@@ -1,6 +1,6 @@
 {
   "name": "pacioli",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "CLI tool for generating professional financial documents (invoices, quotations, receipts) for freelancers. Named after Luca Pacioli, father of accounting.",
   "author": "Peerasak Unsakon <clonezer@gmail.com>",
   "license": "MIT",

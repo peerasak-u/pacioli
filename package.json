@@ -43,7 +43,7 @@
   },
   "scripts": {
     "dev": "bun run src/cli.ts",
-    "generate": "bun run src/index.ts",
+    "generate": "bun run src/cli.ts generate",
     "test": "bun test",
     "test:watch": "bun test --watch"
   },

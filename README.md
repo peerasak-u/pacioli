@@ -1,8 +1,20 @@
-# Pacioli
+# Pacioli - Professional Financial Documents for Freelancers
 
-Generate professional invoices, quotations, and receipts in seconds.
+![Example Documents](example.png)
 
-Named after **Luca Pacioli** (1494), the father of modern accounting.
+> Named after **Luca Pacioli** (1494), the father of modern accounting and bookkeeping
+
+Generate professional invoices, quotations, and receipts in seconds. Beautiful A4 PDFs with automatic Thai numbering, tax calculations, and customizable templates.
+
+## Features
+
+- **Zero configuration** - Start generating documents in 30 seconds with `bunx pacioli init`
+- **Auto-numbering** - Sequential document numbers that reset monthly (INV-202511-001, INV-202511-002, etc.)
+- **Thai tax support** - Automatic withholding tax and VAT calculations
+- **Beautiful templates** - Professional HTML/CSS templates for each document type
+- **Customizable** - Edit templates to match your branding
+- **Customer database** - Reusable customer JSON files, no duplication
+- **Bun-native** - Lightning fast with Bun runtime
 
 ## Quick Start
 
@@ -10,107 +22,42 @@ Named after **Luca Pacioli** (1494), the father of modern accounting.
 # Initialize project
 bunx pacioli init
 
-# Configure profile
+# Configure your profile
 cp config/freelancer.example.json config/freelancer.json
 
-# Generate document
+# Generate your first invoice
 bunx pacioli generate invoice examples/invoice.json --customer customers/acme-corp.json
 ```
 
-PDF saved to `output/invoice-INV-202411-001.pdf`
+That's it! Your PDF is ready in `output/invoice-INV-202411-001.pdf`
 
-## Features
+## Usage Overview
 
-- **Auto-numbering** - Sequential numbers that reset monthly (INV-202411-001)
-- **Thai tax support** - Withholding tax and VAT calculations
-- **Customer database** - Reusable JSON files, no duplication
-- **Beautiful PDFs** - Professional HTML templates with Thai Buddhist Era dates
-- **Zero config** - Start in 30 seconds
-
-## Usage
-
-### Init
 ```bash
-pacioli init [--force]
-```
-Creates: `templates/`, `examples/`, `customers/`, `config/`, `output/`, `.metadata.json`
-
-### Generate
-```bash
-pacioli generate <type> <data.json> --customer <customer.json> [--output path] [--profile path]
+pacioli init                    # Initialize new project
+pacioli generate invoice data.json --customer customer.json
+pacioli generate quotation data.json --customer customer.json
+pacioli generate receipt data.json --customer customer.json
 ```
 
-**Types**: `invoice`, `quotation`, `receipt`
-
-**Auto-numbering**: Set `"documentNumber": "auto"` for sequential numbering
+For detailed documentation, see [USAGE.md](USAGE.md)
 
 ## Document Types
 
-- **Invoice** - Bill for completed work (due date, payment terms)
-- **Quotation** - Price estimate (validity period, optional payment terms)
-- **Receipt** - Payment confirmation (payment date, method, reference)
+| Type | Use Case | Key Features |
+|------|----------|--------------|
+| **Invoice** | Bill for completed work | Due date, payment terms |
+| **Quotation** | Price estimate before work | Validity period, optional milestones |
+| **Receipt** | Payment confirmation | Payment date, method, reference |
 
-## Configuration
+## Why "Pacioli"?
 
-**config/freelancer.json**:
-```json
-{
-  "name": "Your Name",
-  "title": "Your Title",
-  "email": "you@example.com",
-  "phone": "081-234-5678",
-  "address": "Your Address",
-  "taxId": "Your Tax ID",
-  "bankInfo": {
-    "bankName": "Bank Name",
-    "accountName": "Account Name",
-    "accountNumber": "Account Number",
-    "branch": "Branch"
-  },
-  "signature": "config/signature.png"
-}
-```
+Luca Pacioli (1445-1517) was an Italian mathematician and Franciscan friar who published the first comprehensive book on double-entry bookkeeping in 1494. His work, *Summa de arithmetica*, laid the foundation for modern accounting and is still used today. This tool honors his legacy by making financial document generation accessible to modern freelancers.
 
-**Document Data** (`data.json`):
-```json
-{
-  "documentNumber": "auto",
-  "issueDate": "2024-11-12",
-  "items": [
-    {
-      "description": "Web Development",
-      "quantity": 1,
-      "unit": "Project",
-      "unitPrice": 50000
-    }
-  ],
-  "taxType": "withholding",
-  "taxRate": 0.03,
-  "taxLabel": "หัก ณ ที่จ่าย 3%",
-  "paymentTerms": ["Full payment within 30 days"],
-  "notes": "Thank you!"
-}
-```
+## Requirements
 
-**Customer** (`customers/client.json`):
-```json
-{
-  "name": "Client Name",
-  "company": "Company Ltd",
-  "address": "Client Address",
-  "taxId": "Client Tax ID",
-  "phone": "02-123-4567"
-}
-```
-
-## Tax Calculations
-
-- **Withholding**: Total = Subtotal - (Subtotal × Rate)
-- **VAT**: Total = Subtotal + (Subtotal × Rate)
-
-## Customization
-
-Edit `templates/*.html` to change design. Uses `{{placeholder}}` syntax.
+- **Bun** ≥ 1.0.0
+- **Puppeteer** (installed automatically)
 
 ## Development
 
@@ -118,14 +65,17 @@ Edit `templates/*.html` to change design. Uses `{{placeholder}}` syntax.
 bun install
 bun test
 bun run dev init
-bun run dev generate invoice examples/invoice.json --customer customers/acme-corp.json
 ```
-
-## Requirements
-
-- Bun ≥ 1.0.0
-- Puppeteer (auto-installed)
 
 ## License
 
 MIT
+
+## Support
+
+- **Issues**: https://github.com/peerasak-u/pacioli/issues
+- **Discussions**: https://github.com/peerasak-u/pacioli/discussions
+
+---
+
+Made with ❤️ for freelancers everywhere

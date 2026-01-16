@@ -17,11 +17,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/peerasak-u/luca.git"
+    "url": "https://github.com/peerasak-u/pacioli.git"
   },
-  "homepage": "https://github.com/peerasak-u/luca#readme",
+  "homepage": "https://github.com/peerasak-u/pacioli#readme",
   "bugs": {
-    "url": "https://github.com/peerasak-u/luca/issues"
+    "url": "https://github.com/peerasak-u/pacioli/issues"
   },
   "bin": {
     "pacioli": "./src/cli.ts"

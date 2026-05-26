@@ -74,7 +74,6 @@ MIT
 ## Support
 
 - **Issues**: https://github.com/peerasak-u/pacioli/issues
-- **Discussions**: https://github.com/peerasak-u/pacioli/discussions
 
 ---
 
